@@ -1,65 +1,54 @@
 import Link from 'next/link'
-import dbConnect from '../lib/dbConnect'
-import Pet from '../models/Pet'
+import styles from '../styles/Home.module.css'
+import { useState } from 'react'
 
-const Index = ({ pets }) => (
-  <>
-    {/* Create a card for each pet */}
-    {pets.map((pet) => (
-      <div key={pet._id}>
-        <div className="card">
-          <img src={pet.image_url} />
-          <h5 className="pet-name">{pet.name}</h5>
-          <div className="main-content">
-            <p className="pet-name">{pet.name}</p>
-            <p className="owner">Owner: {pet.owner_name}</p>
-
-            {/* Extra Pet Info: Likes and Dislikes */}
-            <div className="likes info">
-              <p className="label">Likes</p>
-              <ul>
-                {pet.likes.map((data, index) => (
-                  <li key={index}>{data} </li>
-                ))}
-              </ul>
-            </div>
-            <div className="dislikes info">
-              <p className="label">Dislikes</p>
-              <ul>
-                {pet.dislikes.map((data, index) => (
-                  <li key={index}>{data} </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="btn-container">
-              <Link href="/[id]/edit" as={`/${pet._id}/edit`} legacyBehavior>
-                <button className="btn edit">Edit</button>
-              </Link>
-              <Link href="/[id]" as={`/${pet._id}`} legacyBehavior>
-                <button className="btn view">View</button>
-              </Link>
-            </div>
-          </div>
-        </div>
+function Guest() {
+  return (
+    <main className='container mx-auto text-center py-20'>
+      <h3 className='text-4xl font-bold'>
+        Guest Homepage
+      </h3>
+      <div className='flex justify-center'>
+        <Link href='/login' legacyBehavior><a className='mt-5 px-10 py-1 rounded-sm bg-indigo-500 text-gray-50'>Prijavi se</a></Link>
       </div>
-    ))}
-  </>
-)
-
-/* Retrieves pet(s) data from mongodb database */
-export async function getServerSideProps() {
-  await dbConnect()
-
-  /* find all the data in our database */
-  const result = await Pet.find({})
-  const pets = result.map((doc) => {
-    const pet = doc.toObject()
-    pet._id = pet._id.toString()
-    return pet
-  })
-
-  return { props: { pets: pets } }
+    </main>
+  )
 }
 
-export default Index
+function User() {
+  return (
+    <main className='container mx-auto text-center py-20'>
+      <h3 className='text-4xl font-bold'>
+        Authorized user Homepage
+      </h3>
+      <div className='details'>
+        <h5>Unknown</h5>
+        <h5>Unknown</h5>
+      </div>
+
+      <div className='flex justify-center'>
+        <button className='mt-5 px-10 py-1 rounded-sm bg-indigo-500 bg-gray-50'>Odjavi se</button>
+
+      </div>
+      <div className='flex justify-center'>
+        <Link href='/profile' legacyBehavior><a className='mt-5 px-10 py-1 rounded-sm bg-indigo-500 text-gray-50'>Profil</a></Link>
+      </div>
+    </main>
+  )
+}
+
+
+const Home = () => {
+
+  const [session, setSession] = useState(false);
+
+return (
+  <div className={styles.container}>
+    {session ? User() : Guest()}
+  </div>
+)
+}
+
+
+
+export default Home
