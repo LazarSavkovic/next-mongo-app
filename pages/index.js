@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 import { useState } from 'react'
+import {useSession, signOut } from 'next-auth/react'
 
 function Guest() {
   return (
@@ -15,19 +16,19 @@ function Guest() {
   )
 }
 
-function User() {
+function User({session, handleSignOut}) {
   return (
     <main className='container mx-auto text-center py-20'>
       <h3 className='text-4xl font-bold'>
         Authorized user Homepage
       </h3>
       <div className='details'>
-        <h5>Unknown</h5>
-        <h5>Unknown</h5>
+        <h5>{session.user.name}</h5>
+        <h5>{session.user.email}</h5>
       </div>
 
       <div className='flex justify-center'>
-        <button className='mt-5 px-10 py-1 rounded-sm bg-indigo-500 bg-gray-50'>Odjavi se</button>
+        <button onClick={handleSignOut} className='mt-5 px-10 py-1 rounded-sm bg-indigo-500 bg-gray-50'>Odjavi se</button>
 
       </div>
       <div className='flex justify-center'>
@@ -40,11 +41,15 @@ function User() {
 
 const Home = () => {
 
-  const [session, setSession] = useState(false);
+  const {data: session} = useSession();
+
+  function handleSignOut() {
+    signOut()
+  }
 
 return (
   <div className={styles.container}>
-    {session ? User() : Guest()}
+    {session ? User({session, handleSignOut }) : Guest()}
   </div>
 )
 }
