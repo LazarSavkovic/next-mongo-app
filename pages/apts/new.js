@@ -12,7 +12,13 @@ const NewApt = () => {
     long: 0,
   }
 
-  return <AptForm formId="add-apt-form" aptForm={aptForm} />
+  return (
+    <div className="container mx-auto my-40 w-2/4" >
+      <div className='grid grid-cols-1'>
+        <AptForm formId="add-apt-form" aptForm={aptForm} />
+      </div>
+    </div>
+  )
 }
 
 export default NewApt

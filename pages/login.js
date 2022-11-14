@@ -41,11 +41,9 @@ const Login = () => {
             <Head>
                 <title>Prijavi se</title>
             </Head>
-            <section className='w-3/4 mx-auto flex flex-col gap-10'>
+            <section className='w-3/4 mx-auto flex flex-col gap-5'>
                 <div className='title'>
-                    <h1 className='text-gray-800 text-4xl font-bold py-4'>Prijavi se</h1>
-                    <p className='w-3/4 mx-auto text-gray-400'>In publishing and graphic design, Lorem ipsum is a placeholder text .</p>
-                </div>
+                    <h1 className='text-gray-800 text-3xl font-bold py-4'>Prijavi se</h1></div>
                 <form onSubmit={formik.handleSubmit} className='flex flex-col gap-5'>
                     <div className={styles.input_group}>
                         <input

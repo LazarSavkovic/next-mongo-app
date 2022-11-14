@@ -3,23 +3,18 @@ import dbConnect from '../../lib/dbConnect'
 import Apt from '../../models/Apt'
 import AptCard from '../../components/AptCard'
 
-import { Grid } from 'semantic-ui-react'
-
 const Index = ({ apts }) => (
   <>
-      <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-    <Grid columns={3}>
-      <Grid.Row>
+    <div className="container mx-auto my-40 w-2/4" >
+      <div className='grid grid-cols-1'>
+        <h1 className="text-3xl text-center font-bold mb-5">
+          Nekretnine Beograd
+        </h1>
         {apts.map((apt) => (
-          <Grid.Column key={apt._id}>
-            <AptCard apt={apt} />
-          </Grid.Column>
+          <AptCard key={apt._id} apt={apt} />
         ))}
-
-      </Grid.Row>
-    </Grid>
+      </div>
+    </div>
   </>
 )
 
