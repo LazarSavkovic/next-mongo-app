@@ -46,7 +46,7 @@ const Register =  () => {
             <section className='w-3/4 mx-auto flex flex-col gap-10'>
                 <div className='title'>
                     <h1 className='text-gray-800 text-4xl font-bold py-4'>Registruj se</h1>
-                    <p className='w-3/4 mx-auto text-gray-400'>In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface.</p>
+                    <p className='w-3/4 mx-auto text-gray-400'>In publishing and graphic design, Lorem ipsum is a placeholder text.</p>
                 </div>
                 <form onSubmit={formik.handleSubmit} className='flex flex-col gap-5'>
                     <div className={styles.input_group}>
