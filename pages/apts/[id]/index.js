@@ -42,7 +42,7 @@ export async function getServerSideProps({ params }) {
     .then((res) => res.json())
     .then((json) => json.data)
 
-  const url = `http://localhost:3000/api/apts/${params.id}`
+  const url = `${process.env.API_URL}/apts/${params.id}`
 
   /* find all the data in our database */
   const response = await fetch(url);

@@ -53,7 +53,7 @@ export async function getServerSideProps({ params, req }) {
     .then((res) => res.json())
     .then((json) => json.data)
 
-  const url = `http://localhost:3000/api/flats/${params.id}?userid=${session.user._id}`
+  const url = `${process.env.API_URL}/flats/${params.id}?userid=${session.user._id}`
 
   /* find all the data in our database */
   const response = await fetch(url);

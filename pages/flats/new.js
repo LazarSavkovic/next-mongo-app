@@ -1,7 +1,5 @@
 import FlatForm from '../../components/FlatForm'
 import { getSession } from 'next-auth/react'
-import User from '../../models/User'
-import dbConnect from '../../lib/dbConnect'
 
 const NewFlat = ({userId}) => {
   const flatForm = {
@@ -40,16 +38,7 @@ export async function getServerSideProps({ req }) {
     }
   }
 
-  const email = session.user.email;
-
-  await dbConnect();
-
-  const user = await User.findOne({email})
-  console.log(user)
-
-  const userObject = user.toObject()
-  userObject._id = userObject._id.toString()
-  const userId = userObject._id;
+  const userId = session.user._id;
 
 
   return {
