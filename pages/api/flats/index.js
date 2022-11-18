@@ -1,6 +1,6 @@
 import dbConnect from '../../../lib/dbConnect'
 import Flat from '../../../models/Flat'
-// import { getPriceForFlat } from '../../../lib/neural_network/predict_prices'
+import mongoose from 'mongoose'
 
 export default async function handler(req, res) {
   const { method } = req
@@ -10,10 +10,17 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const flats = await Flat.find({author: req.user._id}) /* find all the data in our database */
+        let flats
+
+        if (req.query.id) {
+           flats = await Flat.find({ author: new mongoose.Types.ObjectId(req.query.id) }) 
+        } else {
+           flats = await Flat.find({}) /* find all the data in our database */
+        }
+
         res.status(200).json({ success: true, data: flats })
       } catch (error) {
-        res.status(400).json({ success: false })
+        res.status(400).json({ success: false, error: error })
       }
       break
     case 'POST':

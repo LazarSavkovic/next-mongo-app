@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import dbConnect from '../../../lib/dbConnect'
-import Apt from '../../../models/Apt'
 import AptBigCard from '../../../components/AptBigCard'
 
 
@@ -38,10 +36,19 @@ const AptPage = ({ apt }) => {
 }
 
 export async function getServerSideProps({ params }) {
-  await dbConnect()
 
-  const apt = await Apt.findById(params.id).lean()
-  apt._id = apt._id.toString()
+  const fetcher = (url) =>
+  fetch(url)
+    .then((res) => res.json())
+    .then((json) => json.data)
+
+  const url = `http://localhost:3000/api/apts/${params.id}`
+
+  /* find all the data in our database */
+  const response = await fetch(url);
+  const result = await response.json();
+
+  const apt = result.data;
 
   return { props: { apt } }
 }

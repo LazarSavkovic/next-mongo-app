@@ -1,6 +1,3 @@
-
-import dbConnect from '../../lib/dbConnect'
-import Apt from '../../models/Apt'
 import AptCard from '../../components/AptCard'
 
 const Index = ({ apts }) => (
@@ -20,15 +17,16 @@ const Index = ({ apts }) => (
 
 /* Retrieves pet(s) data from mongodb database */
 export async function getServerSideProps() {
-  await dbConnect()
 
   /* find all the data in our database */
-  const result = await Apt.find({})
-  const apts = result.map((doc) => {
-    const apt = doc.toObject()
-    apt._id = apt._id.toString()
-    return apt
-  })
+  const url = 'http://localhost:3000/api/apts'
+
+  /* find all the data in our database */
+  const response = await fetch(url);
+  const result = await response.json();
+
+  const apts = result.data;
+  
 
   return { props: { apts: apts } }
 }

@@ -26,7 +26,13 @@ const EditApt = () => {
     long: apt.long,
   }
 
-  return <AptForm formId="edit-apt-form" aptForm={aptForm} forNewApt={false} />
+  return (
+    <div className="container mx-auto my-40 w-2/4" >
+      <div className='grid grid-cols-1'>
+        <AptForm formId="edit-apt-form" aptForm={aptForm} forNewApt={false} />
+      </div>
+    </div>
+  )
 }
 
 export default EditApt

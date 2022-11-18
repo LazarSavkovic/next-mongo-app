@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
 import { useSession, getSession } from 'next-auth/react'
-import dbConnect from '../../lib/dbConnect'
-import Flat from '../../models/Flat'
 import FlatCard from '../../components/FlatCard'
 
 function Guest() {
@@ -42,9 +40,6 @@ function User({ session }) {
 
 
 const Flats = ({ flats, session }) => {
-
-  // const { data: session } = useSession();
-
   return (
     <div className="container mx-auto my-40 w-3/4" >
       <div className='grid grid-cols-1'>
@@ -77,25 +72,14 @@ export async function getServerSideProps({ req }) {
     }
   }
 
-  await dbConnect()
+  const url = `http://localhost:3000/api/flats?id=${session.user._id}`
 
   /* find all the data in our database */
-  const response = await fetch(`http://localhost:3000/api/flats?id=${session.user._id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(session) // body data type must match "Content-Type" header
-  });
-  const flats = response.json();
-  // const flats = result.map((doc) => {
-  //   const flat = doc.toObject()
-  //   flat._id = flat._id.toString()
-  //   if (flat.author) {
-  //     flat.author = flat.author.toString()
-  //   }
-  //   return flat
-  // })
+  const response = await fetch(url);
+  const result = await response.json();
+
+
+  const flats = result.data;
 
   return {
     props: {

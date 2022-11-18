@@ -3,7 +3,7 @@ import Flat from '../../../models/Flat'
 
 export default async function handler(req, res) {
   const {
-    query: { id },
+    query: { id, userid },
     method,
   } = req
 
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET' /* Get a model by its ID */:
       try {
-        const flat = await Flat.findById(id)
+        const flat = await Flat.findOne({_id: id, author: userid})
         if (!flat) {
           return res.status(400).json({ success: false })
         }

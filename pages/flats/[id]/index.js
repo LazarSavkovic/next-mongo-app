@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import dbConnect from '../../../lib/dbConnect'
-import Flat from '../../../models/Flat'
 import FlatBigCard from '../../../components/FlatBigCard'
 import { getSession } from 'next-auth/react'
 
@@ -38,14 +36,30 @@ const FlatPage = ({ flat }) => {
   )
 }
 
-export async function getServerSideProps({ params }) {
-  await dbConnect()
+export async function getServerSideProps({ params, req }) {
+  
+  const session = await getSession({ req })
 
-  const flat = await Flat.findById(params.id).lean()
-  flat._id = flat._id.toString()
-  if (flat.author) {
-    flat.author = flat.author.toString()
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
+    }
   }
+  const fetcher = (url) =>
+  fetch(url)
+    .then((res) => res.json())
+    .then((json) => json.data)
+
+  const url = `http://localhost:3000/api/flats/${params.id}?userid=${session.user._id}`
+
+  /* find all the data in our database */
+  const response = await fetch(url);
+  const result = await response.json();
+
+  const flat = result.data;
 
   return { props: { flat } }
 }
