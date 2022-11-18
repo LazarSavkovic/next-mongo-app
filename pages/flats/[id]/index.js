@@ -2,24 +2,25 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import dbConnect from '../../../lib/dbConnect'
-import Apt from '../../../models/Apt'
-import AptBigCard from '../../../components/AptBigCard'
+import Flat from '../../../models/Flat'
+import FlatBigCard from '../../../components/FlatBigCard'
+import { getSession } from 'next-auth/react'
 
 
 /* Allows you to view apt card info and delete apt card*/
-const AptPage = ({ apt }) => {
+const FlatPage = ({ flat }) => {
   const router = useRouter()
   const [message, setMessage] = useState('')
   const handleDelete = async () => {
-    const aptID = router.query.id
+    const flatID = router.query.id
 
     try {
-      await fetch(`/api/apts/${aptID}`, {
+      await fetch(`/api/flats/${flatID}`, {
         method: 'Delete',
       })
       router.push('/')
     } catch (error) {
-      setMessage('Failed to delete the apt.')
+      setMessage('Failed to delete the flat.')
     }
   }
 
@@ -28,7 +29,7 @@ const AptPage = ({ apt }) => {
     <div className="container mx-auto my-40 w-3/4" >
       <div className='grid grid-cols-1'>
 
-          <AptBigCard key={apt._id} apt={apt} handleDelete={handleDelete}/>
+          <FlatBigCard key={flat._id} flat={flat} handleDelete={handleDelete}/>
           
 
           {message && <p>{message}</p>}
@@ -40,10 +41,13 @@ const AptPage = ({ apt }) => {
 export async function getServerSideProps({ params }) {
   await dbConnect()
 
-  const apt = await Apt.findById(params.id).lean()
-  apt._id = apt._id.toString()
+  const flat = await Flat.findById(params.id).lean()
+  flat._id = flat._id.toString()
+  if (flat.author) {
+    flat.author = flat.author.toString()
+  }
 
-  return { props: { apt } }
+  return { props: { flat } }
 }
 
-export default AptPage
+export default FlatPage

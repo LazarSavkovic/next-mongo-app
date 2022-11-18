@@ -13,11 +13,12 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <title>Procena Nekretnine</title>
-        {/* <Script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" />
-        <Script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js" /> */}
-        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
       </Head>
+      {/* <Script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" />
+        <Script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js" /> */}
+      <Script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"/>
+      <Script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"/>
+
       <SessionProvider session={pageProps.session}>
         <Layout {...pageProps}>
 

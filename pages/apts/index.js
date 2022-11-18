@@ -5,7 +5,7 @@ import AptCard from '../../components/AptCard'
 
 const Index = ({ apts }) => (
   <>
-    <div className="container mx-auto my-40 w-2/4" >
+    <div className="container mx-auto my-40 w-3/4" >
       <div className='grid grid-cols-1'>
         <h1 className="text-3xl text-center font-bold mb-5">
           Nekretnine Beograd
