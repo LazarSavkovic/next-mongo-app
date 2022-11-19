@@ -27,14 +27,16 @@ const Index = ({ apts }) => {
           {paginatedPosts.map((apt) => (
             <AptCard key={apt._id} apt={apt} />
           ))}
+
+          <Pagination
+            items={posts.length}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
-      <Pagination
-        items={posts.length}
-        pageSize={pageSize}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
+
     </>
   )
 }
