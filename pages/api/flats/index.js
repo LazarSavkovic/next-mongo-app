@@ -1,6 +1,10 @@
 import dbConnect from '../../../lib/dbConnect'
 import Flat from '../../../models/Flat'
 import mongoose from 'mongoose'
+import getPriceForFlat from '../../../lib/neural_network/predict_prices'
+
+
+
 
 export default async function handler(req, res) {
   const { method } = req
@@ -25,21 +29,25 @@ export default async function handler(req, res) {
       break
     case 'POST':
       try {
-        // const flat = await Flat.create(
-        //   req.body)
-        /* create a new model in the database */
+    
+        const fullLocation = req.body.location  + ", Beograd, Srbija";
+        const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+        const geocodingRequestUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${fullLocation}.json?limit=1&access_token=${mapboxToken}`
+        const response = await fetch(geocodingRequestUrl)
+        const geoData = await response.json()
+        console.log(geoData)
 
         const flat = new Flat(req.body);
-        // flat.geometry = geoData.body.features[0].geometry;
-        console.log(req.user)
-        // flat.author = req.user._id;
-        // flat.value = Math.round(getPriceForFlat(flat));
+        flat.geometry = geoData.features[0].geometry;
+        
+        flat.value = Math.round(getPriceForFlat(flat));
+        console.log("FLAT IS", flat)
         await flat.save();
 
 
         res.status(201).json({ success: true, data: flat })
       } catch (error) {
-        res.status(400).json({ success: false })
+        res.status(400).json({ success: false, error: error })
       }
       break
     default:

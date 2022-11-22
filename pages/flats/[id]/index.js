@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import FlatBigCard from '../../../components/FlatBigCard'
+import FlatBigCard from '../../../components/FlatComponents/FlatBigCard'
 import { getSession } from 'next-auth/react'
+import Dashboard from '../../../components/Dashboard'
 
 
 /* Allows you to view apt card info and delete apt card*/
@@ -28,13 +29,16 @@ const FlatPage = ({ flat }) => {
       <div className='grid grid-cols-1'>
 
           <FlatBigCard key={flat._id} flat={flat} handleDelete={handleDelete}/>
-          
+          <Dashboard />
 
           {message && <p>{message}</p>}
       </div>
     </div>
   )
 }
+
+
+
 
 export async function getServerSideProps({ params, req }) {
   

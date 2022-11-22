@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
-import AptForm from '../../../components/AptForm'
+import AptForm from '../../../components/AptComponents/AptForm'
 
 const fetcher = (url) =>
   fetch(url)

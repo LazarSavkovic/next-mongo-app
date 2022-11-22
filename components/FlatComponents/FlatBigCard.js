@@ -1,12 +1,14 @@
 import Link from 'next/link'
-import Button from './Button'
+import Button from '../Button'
+import FlatMap from './FlatMap'
 
 const FlatBigCard = ({ flat, handleDelete }) => {
     return (
         <div className="max-w-lg bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 m-5">
-            <a href="#">
+            {flat.image && <a href="#">
                 <img className="rounded-t-lg" src={flat.image} alt={flat.title} />
-            </a>
+            </a>}
+
             <div className="p-5">
                 <a href="#">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{flat.title}</h5>
@@ -15,7 +17,10 @@ const FlatBigCard = ({ flat, handleDelete }) => {
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Povrsina: {flat.sq_mt} m<sup>2</sup></p>
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Broj soba: {flat.rooms}</p>
                 <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-gray-900 dark:text-white">{flat.price} €</span>
+                    <FlatMap latitude={flat.geometry.coordinates[1]} longitude={flat.geometry.coordinates[0]} />
+                </div>
+                <div className="flex justify-between items-center">
+                    <span className="text-2xl font-bold text-gray-900 dark:text-white">{flat.value} €</span>
 
                 </div>
                 <div className='ui two buttons'>

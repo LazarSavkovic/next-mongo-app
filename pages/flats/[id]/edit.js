@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
-import FlatForm from '../../../components/FlatForm'
+import FlatForm from '../../../components/FlatComponents/FlatForm'
 
 const fetcher = (url) =>
   fetch(url)
@@ -17,6 +17,7 @@ const EditFlat = () => {
 
   const flatForm = {
     title: flat.title,
+    location: flat.location,
     short_description: flat.short_description,
     sq_mt: flat.sq_mt,
     floor: flat.floor,

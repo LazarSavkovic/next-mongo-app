@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import AptBigCard from '../../../components/AptBigCard'
+import AptBigCard from '../../../components/AptComponents/AptBigCard'
 
 
 /* Allows you to view apt card info and delete apt card*/

@@ -5,11 +5,10 @@ import React, { useRef, useEffect, useState } from 'react';
 
 
 
-const AptMap = ({ longitude, latitude }) => {
+const FlatMap = ({ longitude, latitude }) => {
 
     const mapContainer = useRef(null);
     const map = useRef(null);
-    mapboxgl.accessToken = 'pk.eyJ1Ijoic2F2a292aWNsYXphcjEiLCJhIjoiY2w3cTdleXVwMDJvZTN3c2FtcnFkbzJrdSJ9.bYMMDPFENqMkUbBSe27A2w';
 
     const [lng, setLng] = useState(longitude);
     const [lat, setLat] = useState(latitude);
@@ -18,6 +17,7 @@ const AptMap = ({ longitude, latitude }) => {
     useEffect(() => {
         if (map.current) return; // initialize map only once
 
+        mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
@@ -61,4 +61,4 @@ const AptMap = ({ longitude, latitude }) => {
 }
 
 
-export default AptMap
+export default FlatMap

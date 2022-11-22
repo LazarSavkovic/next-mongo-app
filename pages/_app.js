@@ -13,12 +13,11 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <title>Procena Nekretnine</title>
-        <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css' rel='stylesheet' />
       </Head>
       <Script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"/>
       <Script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"/>
       <Script src='https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js' />
-
+      
       <SessionProvider session={pageProps.session}>
         <Layout {...pageProps}>
 

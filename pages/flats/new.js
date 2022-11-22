@@ -1,9 +1,11 @@
-import FlatForm from '../../components/FlatForm'
+import FlatForm from '../../components/FlatComponents/FlatForm'
 import { getSession } from 'next-auth/react'
+import Dashboard from '../../components/Dashboard'
 
-const NewFlat = ({userId}) => {
+const NewFlat = ({ userId, session }) => {
   const flatForm = {
     title: '',
+    location: '',
     price: 0,
     short_description: '',
     sq_mt: 0,
@@ -17,9 +19,11 @@ const NewFlat = ({userId}) => {
 
 
   return (
-    <div className="container mx-auto my-40 w-2/4" >
+    <div className="container mx-auto my-40 w-3/4" >
       <div className='grid grid-cols-1'>
-        <FlatForm formId="add-flat-form" flatForm={flatForm} userId={userId} />
+        <Dashboard session={session}>
+          <FlatForm formId="add-flat-form" flatForm={flatForm} userId={userId} />
+        </Dashboard>
       </div>
     </div>
   )

@@ -9,7 +9,7 @@ const flatSchema = new mongoose.Schema({
     },
     location: {
         type: String,
-        // required: true
+        required: true
     },
     value: {
         type: Number,
@@ -27,7 +27,7 @@ const flatSchema = new mongoose.Schema({
     }, rooms: {
         type: Number,
         min: 0,
-        // required: true
+        required: true
     }, floor: {
         type: Number,
         min: 0
@@ -38,11 +38,11 @@ const flatSchema = new mongoose.Schema({
         type: {
             type: String,
             enum: ['Point'],
-            // required: true
+            required: true
         },
         coordinates: {
             type: [Number],
-            // required: true
+            required: true
         }
     }
 }, opts)

@@ -2,14 +2,18 @@ import dbConnect from '../../../lib/dbConnect'
 import Apt from '../../../models/Apt'
 
 export default async function handler(req, res) {
-  const { method } = req
+  const { method } = req;
+
 
   await dbConnect()
 
   switch (method) {
     case 'GET':
       try {
-        const apts = await Apt.find({}) /* find all the data in our database */
+
+        const { limit } = req.query;
+        let apts;
+        limit ? apts = await Apt.find({}).limit(limit) : apts = await Apt.find({});
         res.status(200).json({ success: true, data: apts })
       } catch (error) {
         res.status(400).json({ success: false, error: error })
@@ -22,7 +26,7 @@ export default async function handler(req, res) {
         ) /* create a new model in the database */
         res.status(201).json({ success: true, data: apt })
       } catch (error) {
-        res.status(400).json({ success: false, error: error  })
+        res.status(400).json({ success: false, error: error })
       }
       break
     default:

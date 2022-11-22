@@ -1,4 +1,4 @@
-import AptCard from '../../components/AptCard'
+import AptCard from '../../components/AptComponents/AptCard'
 import { useState, useEffect } from "react";
 import Pagination from "../../components/Pagination";
 import { paginate } from "../../lib/paginate";
@@ -45,7 +45,7 @@ const Index = ({ apts }) => {
 export async function getServerSideProps() {
 
   /* find all the data in our database */
-  const url = `${process.env.API_URL}/apts?_limit=20`
+  const url = `${process.env.API_URL}/apts?limit=100`
 
   /* find all the data in our database */
   const response = await fetch(url);

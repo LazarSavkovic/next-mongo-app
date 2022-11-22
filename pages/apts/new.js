@@ -1,4 +1,4 @@
-import AptForm from '../../components/AptForm'
+import AptForm from '../../components/AptComponents/AptForm'
 
 const NewApt = () => {
   const aptForm = {

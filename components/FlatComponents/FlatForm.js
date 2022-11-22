@@ -11,6 +11,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true }) => {
 
   const [form, setForm] = useState({
     title: flatForm.title,
+    location: flatForm.location,
     short_description: flatForm.short_description,
     sq_mt: flatForm.sq_mt,
     rooms: flatForm.rooms,
@@ -84,6 +85,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true }) => {
   const formValidate = () => {
     let err = {}
     if (!form.title) err.title = 'Naziv je obavezno polje'
+    if (!form.location) err.location = 'Adresa je obavezno polje'
     if (!form.short_description) err.short_description = 'Opis je obavezno polje'
     if (!form.sq_mt) err.sq_mt = 'Povrsina je obavezno polje'
     if (!form.rooms) err.rooms = 'Broj soba je obavezno polje'
@@ -110,9 +112,21 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true }) => {
         <input
           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
           type="text"
-          maxLength="20"
+          maxLength="35"
           name="title"
           value={form.title}
+          onChange={handleChange}
+          required
+        />
+        </div>
+        <div className="mb-6">
+        <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Adresa</label>
+        <input
+          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+          type="text"
+          maxLength="50"
+          name="location"
+          value={form.location}
           onChange={handleChange}
           required
         />
