@@ -20,10 +20,12 @@ const Index = ({ apts }) => {
   return (
     <>
       <div className="container mx-auto my-40 w-3/4" >
-        <div className='grid grid-cols-1'>
-          <h1 className="text-3xl text-center font-bold mb-5">
-            Nekretnine Beograd
-          </h1>
+        <h1 className="text-3xl text-center font-bold mb-5">
+          Nekretnine Beograd
+        </h1>
+        <div className='grid lg:grid-cols-2'>
+
+
           {paginatedPosts.map((apt) => (
             <AptCard key={apt._id} apt={apt} />
           ))}

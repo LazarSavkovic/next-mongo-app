@@ -9,7 +9,7 @@ import Dashboard from '../../components/Dashboard'
 
 const Flats = ({ flats, session }) => {
   return (
-    <div className="container mx-auto my-40 w-3/4" >
+    <div className="container mx-auto my-28 w-3/4" >
       <div className='grid grid-cols-1'>
         <Dashboard session={session}>
         <div className={styles.container}>

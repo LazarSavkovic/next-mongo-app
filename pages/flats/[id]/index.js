@@ -7,7 +7,7 @@ import Dashboard from '../../../components/Dashboard'
 
 
 /* Allows you to view apt card info and delete apt card*/
-const FlatPage = ({ flat }) => {
+const FlatPage = ({ flat, session }) => {
   const router = useRouter()
   const [message, setMessage] = useState('')
   const handleDelete = async () => {
@@ -25,15 +25,16 @@ const FlatPage = ({ flat }) => {
 
   return (
 
-    <div className="container mx-auto my-40 w-3/4" >
+    <div className="container mx-auto my-28 w-3/4" >
       <div className='grid grid-cols-1'>
 
-          <FlatBigCard key={flat._id} flat={flat} handleDelete={handleDelete}/>
-          <Dashboard />
+        <Dashboard session={session}>
+        <FlatBigCard key={flat._id} flat={flat} handleDelete={handleDelete} />
+      </ Dashboard>
 
-          {message && <p>{message}</p>}
-      </div>
+      {message && <p>{message}</p>}
     </div>
+    </div >
   )
 }
 
@@ -41,7 +42,7 @@ const FlatPage = ({ flat }) => {
 
 
 export async function getServerSideProps({ params, req }) {
-  
+
   const session = await getSession({ req })
 
   if (!session) {
@@ -53,9 +54,9 @@ export async function getServerSideProps({ params, req }) {
     }
   }
   const fetcher = (url) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((json) => json.data)
+    fetch(url)
+      .then((res) => res.json())
+      .then((json) => json.data)
 
   const url = `${process.env.API_URL}/flats/${params.id}?userid=${session.user._id}`
 
@@ -65,7 +66,7 @@ export async function getServerSideProps({ params, req }) {
 
   const flat = result.data;
 
-  return { props: { flat } }
+  return { props: { flat, session } }
 }
 
 export default FlatPage

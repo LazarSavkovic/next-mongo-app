@@ -29,7 +29,7 @@ const FlatMap = ({ longitude, latitude }) => {
         map.current.addControl(new mapboxgl.NavigationControl());
 
 
-        new mapboxgl.Marker({ color: "#ff0000" })
+        new mapboxgl.Marker({ color: " #1976D2" })
             .setLngLat([longitude, latitude])
             .setPopup(
                 new mapboxgl.Popup({ offset: 25 })
@@ -51,11 +51,11 @@ const FlatMap = ({ longitude, latitude }) => {
 
     return (
 
-        <div style={{ width: "100%", height: '450px' }}>
+        <div style={{height: '400px' }} className='w-full flex flex-col items-center justify-center'>
             <div className="map-sidebar">
                 Longituda: {lng} | Latituda: {lat} | Zum: {zoom}
             </div>
-            <div ref={mapContainer} className="map-container" />
+            <div ref={mapContainer} style={{width: '85%', height: '75%', borderRadius: '0.5rem', display: 'flex', justifyContent: 'center', alignContent: 'center'}} className="map-container" />
         </div>
     )
 }

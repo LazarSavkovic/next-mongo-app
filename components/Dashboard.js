@@ -11,18 +11,23 @@ const Dashboard = ({ children, session }) => {
         signOut()
     }
 
+    const getPlace = () => {
+        switch(router.pathname) {
+            case  '/flats':
+              return 'Nekretnine';
+            case  '/flats/new':
+              return 'Unesi novu nekretninu';
+            default:
+              return '';
+          }
+    }
+
     return (
         <>
-            <aside className="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
-                <div>
-                    <div className="-mx-6 px-6 py-4">
-                        <a href="#" title="home">
-                            <img src="https://tailus.io/sources/blocks/stats-cards/preview/images/logo.svg" className="w-32" alt="tailus logo" />
-                        </a>
-                    </div>
-
+            <aside className="ml-[-100%] fixed z-10 top-14 pb-3 px-6 w-full flex flex-col h-screen border-r bg-white transition duration-300 w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
+                <div >
                     <div className="mt-8 text-center">
-                        <img src={session.user.image} alt="" className="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28" />
+                        <img src={session.user.image} alt="" className="w-8 h-8 m-auto rounded-full object-cover lg:w-24 lg:h-24" />
                         <h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">{session.user.name}</h5>
                         <h5 className="hidden my-2 text-sm text-gray-600 lg:block">{session.user.email}</h5>
                         <span className="hidden text-gray-400 lg:block">Gost</span>
@@ -73,15 +78,6 @@ const Dashboard = ({ children, session }) => {
                                 </a>
                             </Link>
                         </li>
-                        <li>
-                            <a href="#" className={router.pathname === '#' ? styles.active_dashboard_btn : styles.inactive_dashboard_btn}>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path className="fill-current text-gray-300 group-hover:text-cyan-300" d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
-                                    <path className="fill-current text-gray-600 group-hover:text-cyan-600" fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
-                                </svg>
-                                <span className="group-hover:text-gray-700">Finance</span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
 
@@ -94,10 +90,10 @@ const Dashboard = ({ children, session }) => {
                     </button>
                 </div>
             </aside>
-            <div className="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
-                <div className="sticky z-10 top-0 h-16 border-b bg-white lg:py-2.5">
+            <div className="lg:ml-auto mb-6 lg:w-[68%] xl:w-[74%] 2xl:w-[81%]">
+                <div className="sticky z-5 top-0 h-16 border-b bg-white lg:py-2.5">
                     <div className="px-6 flex items-center justify-between space-x-4 2xl:container">
-                        <h5 hidden className="text-2xl text-gray-600 font-medium lg:block">Dashboard</h5>
+                        <h5 hidden className="text-2xl text-gray-600 font-medium lg:block">{getPlace()}</h5>
                         <button className="w-12 h-16 -mr-2 border-r lg:hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -135,7 +131,7 @@ const Dashboard = ({ children, session }) => {
                     </div>
                 </div>
 
-                <div className="px-6 pt-6 2xl:container pl-32">
+                <div className="px-6 pt-6 2xl:container">
                         {children}
 
                 </div>
