@@ -1,9 +1,12 @@
 import Link from 'next/link'
-import {useRouter} from 'next/router'
-import {signOut} from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { signOut } from 'next-auth/react'
 import styles from '../styles/Dashboard.module.css'
+import { useState } from 'react'
 
 const Dashboard = ({ children, session }) => {
+    let [open, setOpen] = useState(false);
+
     const router = useRouter();
     console.log(router)
 
@@ -11,26 +14,31 @@ const Dashboard = ({ children, session }) => {
         signOut()
     }
 
+
+
     const getPlace = () => {
-        switch(router.pathname) {
-            case  '/flats':
-              return 'Nekretnine';
-            case  '/flats/new':
-              return 'Unesi novu nekretninu';
+        switch (router.pathname) {
+            case '/flats':
+                return 'Nekretnine';
+            case '/flats/new':
+                return 'Unesi novu nekretninu';
             default:
-              return '';
-          }
+                return '';
+        }
     }
 
     return (
         <>
-            <aside className="ml-[-100%] fixed z-10 top-14 pb-3 px-6 w-full flex flex-col h-screen border-r bg-white transition duration-300 w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
+            <aside className={`fixed z-10 top-14 pb-3 px-6 w-full flex flex-col h-screen border-r bg-white transition-all duration-300 w-6/12  sm:w-5/12 md:w-4/12  lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%] ${open ? '' : 'ml-[-100%] '}`}>
                 <div >
-                    <div className="mt-8 text-center">
-                        <img src={session.user.image} alt="" className="w-8 h-8 m-auto rounded-full object-cover lg:w-24 lg:h-24" />
+                    <div className="mt-16 text-center">
+                        <img src={session.user.image} alt="" className="w-10 h-10 m-auto rounded-full object-cover lg:w-24 lg:h-24" />
                         <h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">{session.user.name}</h5>
                         <h5 className="hidden my-2 text-sm text-gray-600 lg:block">{session.user.email}</h5>
                         <span className="hidden text-gray-400 lg:block">Gost</span>
+                    </div>
+                    <div onClick={() => setOpen(!open)} className='text-3xl absolute right-8 top-10 cursor-pointer lg:hidden'>
+                        <ion-icon name={open ? 'close' : 'menu'}></ion-icon>
                     </div>
 
                     <ul className="space-y-2 tracking-wide mt-8">
@@ -94,7 +102,7 @@ const Dashboard = ({ children, session }) => {
                 <div className="sticky z-5 top-0 h-16 border-b bg-white lg:py-2.5">
                     <div className="px-6 flex items-center justify-between space-x-4 2xl:container">
                         <h5 hidden className="text-2xl text-gray-600 font-medium lg:block">{getPlace()}</h5>
-                        <button className="w-12 h-16 -mr-2 border-r lg:hidden">
+                        <button onClick={() => setOpen(!open)} className="w-12 h-16 -mr-2 border-r lg:hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
@@ -132,7 +140,7 @@ const Dashboard = ({ children, session }) => {
                 </div>
 
                 <div className="px-6 pt-6 2xl:container">
-                        {children}
+                    {children}
 
                 </div>
             </div>
