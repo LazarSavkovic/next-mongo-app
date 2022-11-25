@@ -43,9 +43,9 @@ const Register =  () => {
             <Head>
                 <title>Registruj se</title>
             </Head>
-            <section className='w-3/4 mx-auto flex flex-col gap-10'>
+            <section className='w-3/4 mx-auto flex flex-col gap-5'>
                 <div className='title'>
-                    <h1 className='text-gray-800 text-3xl font-bold py-4'>Registruj se</h1>
+                    <h1 className='text-gray-800 text-2xl font-bold py-2'>Registruj se</h1>
                 </div>
                 <form onSubmit={formik.handleSubmit} className='flex flex-col gap-5'>
                     <div className={styles.input_group}>

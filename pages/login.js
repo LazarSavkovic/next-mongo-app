@@ -8,7 +8,7 @@ import {useState} from 'react'
 import { signIn, signOut} from 'next-auth/react'
 import {useFormik} from 'formik'
 import {loginValidate}  from '../lib/validate'
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 
 const Login = () => {
     const [show, setShow] = useState(false)
@@ -43,7 +43,7 @@ const Login = () => {
             </Head>
             <section className='w-3/4 mx-auto flex flex-col gap-5'>
                 <div className='title'>
-                    <h1 className='text-gray-800 text-3xl font-bold py-4'>Prijavi se</h1></div>
+                    <h1 className='text-gray-800 text-2xl font-bold py-2'>Prijavi se</h1></div>
                 <form onSubmit={formik.handleSubmit} className='flex flex-col gap-5'>
                     <div className={styles.input_group}>
                         <input
