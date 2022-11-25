@@ -1,8 +1,10 @@
 import Link from 'next/link'
+import { useEffect } from 'react'
 import Button from '../Button'
 import FlatMap from './FlatMap'
 
 const FlatBigCard = ({ flat, handleDelete }) => {
+
     return (
         <>
 

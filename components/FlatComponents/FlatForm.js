@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { mutate } from 'swr'
 import mongoose from 'mongoose'
 
-const FlatForm = ({ userId, formId, flatForm, forNewFlat = true }) => {
+const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = false }) => {
   const router = useRouter()
   const contentType = 'application/json'
   const [errors, setErrors] = useState({})
@@ -15,8 +15,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true }) => {
     short_description: flatForm.short_description,
     sq_mt: flatForm.sq_mt,
     rooms: flatForm.rooms,
-    floor: flatForm.floor,
-    author: mongoose.Types.ObjectId(userId)
+    floor: flatForm.floor
   })
 
   /* The PUT method edits an existing entry in the mongodb database. */
@@ -49,24 +48,63 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true }) => {
 
   /* The POST method adds a new entry in the mongodb database. */
   const postData = async (form) => {
-    try {
-      const res = await fetch('/api/flats', {
-        method: 'POST',
-        headers: {
-          Accept: contentType,
-          'Content-Type': contentType,
-        },
-        body: JSON.stringify(form),
-      })
 
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status)
+    if (justPredict) {
+      try {
+        const res = await fetch('/api/flats/predict', {
+          method: 'POST',
+          headers: {
+            Accept: contentType,
+            'Content-Type': contentType,
+          },
+          body: JSON.stringify(form),
+        })
+
+        const result = await res.json()
+
+        const flat = result.data;
+
+        var oldFlats = JSON.parse(localStorage.getItem('flatsArray')) || [];
+
+        oldFlats.push(flat);
+
+        localStorage.setItem('flatsArray', JSON.stringify(oldFlats));
+
+        // Throw error with status code in case Fetch API req failed
+        if (!res.ok) {
+          throw new Error(res.status)
+        }
+
+
+        router.push('/flats/predicted')
+      } catch (error) {
+        setMessage('Failed to add flat')
       }
 
-      router.push('/')
-    } catch (error) {
-      setMessage('Failed to add flat')
+    } else {
+
+      const formWithAuthor = form;
+      formWithAuthor.author = mongoose.Types.ObjectId(userId)
+
+      try {
+        const res = await fetch('/api/flats', {
+          method: 'POST',
+          headers: {
+            Accept: contentType,
+            'Content-Type': contentType,
+          },
+          body: JSON.stringify(formWithAuthor),
+        })
+
+        // Throw error with status code in case Fetch API req failed
+        if (!res.ok) {
+          throw new Error(res.status)
+        }
+
+        router.push('/flats')
+      } catch (error) {
+        setMessage('Failed to add flat')
+      }
     }
   }
 
@@ -108,72 +146,72 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true }) => {
     <>
       <form id={formId} onSubmit={handleSubmit}>
         <div className="mb-6">
-        <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Naziv</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          type="text"
-          maxLength="35"
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Naziv</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            type="text"
+            maxLength="35"
+            name="title"
+            value={form.title}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="mb-6">
-        <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Adresa</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          type="text"
-          maxLength="50"
-          name="location"
-          value={form.location}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Adresa</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            type="text"
+            maxLength="50"
+            name="location"
+            value={form.location}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div className="mb-6">
-        <label htmlFor="short_description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Kratak opis</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          type="text"
-          maxLength="30"
-          name="short_description"
-          value={form.short_description}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="short_description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Kratak opis</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            type="text"
+            maxLength="30"
+            name="short_description"
+            value={form.short_description}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="mb-6">
-        <label htmlFor="sq_mt" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Povrsina</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          type="number"
-          name="sq_mt"
-          value={form.sq_mt}
-          onChange={handleChange}
-        />
+          <label htmlFor="sq_mt" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Povrsina</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            type="number"
+            name="sq_mt"
+            value={form.sq_mt}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-6">
-        <label htmlFor="rooms" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Broj soba</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          type="number"
-          name="rooms"
-          checked={form.rooms}
-          onChange={handleChange}
-        />
+          <label htmlFor="rooms" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Broj soba</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            type="number"
+            name="rooms"
+            checked={form.rooms}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-6">
-        <label htmlFor="floor" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sprat</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          name="floor"
-          type="number"
-          value={form.floor}
-          onChange={handleChange}
-        />
-                </div>
+          <label htmlFor="floor" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sprat</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            name="floor"
+            type="number"
+            value={form.floor}
+            onChange={handleChange}
+          />
+        </div>
         <button type="submit" className="text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
           Submit
         </button>
