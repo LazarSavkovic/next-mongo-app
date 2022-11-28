@@ -2,6 +2,7 @@ import AptCard from '../../components/AptComponents/AptCard'
 import { useState, useEffect } from "react";
 import Pagination from "../../components/Pagination";
 import { paginate } from "../../lib/paginate";
+import { motion } from 'framer-motion'
 
 
 const Index = ({ apts }) => {
@@ -18,28 +19,34 @@ const Index = ({ apts }) => {
 
 
   return (
-    <>
-      <div className="container mx-auto my-40 w-3/4" >
-        <h1 className="text-3xl text-center font-bold mb-5">
-          Nekretnine Beograd
-        </h1>
-        <div className='grid lg:grid-cols-2'>
+
+      <div className="flex h-screen bg-blue-400">
+        <div className="m-auto bg-slate-50 rounded-md w-3/5 min-h-[75%] mt-24 pt-16">
+          <h1 className="text-3xl text-center tracking-wider">
+            Nekretnine u Beogradu
+          </h1>
+          <motion.div className='grid lg:grid-cols-2'
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}>
 
 
-          {paginatedPosts.map((apt) => (
-            <AptCard key={apt._id} apt={apt} />
-          ))}
+            {paginatedPosts.map((apt) => (
+              <AptCard key={apt._id} apt={apt} />
+            ))}
 
-          <Pagination
-            items={posts.length}
-            pageSize={pageSize}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
+            <Pagination
+              items={posts.length}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </motion.div>
+
+
         </div>
       </div>
 
-    </>
   )
 }
 

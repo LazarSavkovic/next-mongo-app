@@ -4,14 +4,15 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../styles/Form.module.css'
 import { HiAtSymbol, HiFingerPrint, HiOutlineUser } from 'react-icons/hi'
-import {useState} from 'react'
+import { useState } from 'react'
 import { useFormik } from 'formik'
-import {registerValidate } from '../lib/validate'
+import { registerValidate } from '../lib/validate'
 import { useRouter } from 'next/router'
+import { motion } from 'framer-motion'
 
-const Register =  () => {
+const Register = () => {
 
-    const [show, setShow] = useState({password: false, cpassword: false});
+    const [show, setShow] = useState({ password: false, cpassword: false });
     const router = useRouter();
     const formik = useFormik({
         initialValues: {
@@ -24,28 +25,37 @@ const Register =  () => {
         onSubmit
     })
 
-    async function onSubmit (values) {
+    async function onSubmit(values) {
         const options = {
             method: 'POST',
-            headers: {'Content-Type':'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values)
         }
         await fetch('http://localhost:3000/api/auth/signup', options)
             .then(res => res.json())
             .then((data) => {
-                if(data) router.push('/')
+                if (data) router.push('/')
             })
 
     }
 
-    return(
+    return (
         <AuthLayout>
             <Head>
                 <title>Registruj se</title>
             </Head>
-            <section className='w-3/4 mx-auto flex flex-col gap-5'>
+            <motion.section
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.7 }}
+                transition={{
+                    duration: 0.5,
+                    delay: 0.3,
+                    ease: [0, 0.71, 0.2, 1.01]
+                }}
+                className='w-3/4 mx-auto flex flex-col gap-5'>
                 <div className='title'>
-                    <h1 className='text-gray-800 text-2xl font-bold py-2'>Registruj se</h1>
+                    <h1 className='text-gray-800 text-2xl font-bold py-2 tracking-wider'>Registruj se</h1>
                 </div>
                 <form onSubmit={formik.handleSubmit} className='flex flex-col gap-5'>
                     <div className={styles.input_group}>
@@ -56,7 +66,7 @@ const Register =  () => {
                             className={styles.input_text}
                             {...formik.getFieldProps('username')} />
                         <span className='icon flex items-center px-4' >
-                            <HiOutlineUser size={25}/>
+                            <HiOutlineUser size={25} />
                         </span>
                     </div>
                     {formik.errors.username && formik.touched.username ? <span className='text-rose-500'>{formik.errors.username}</span> : <></>}
@@ -68,7 +78,7 @@ const Register =  () => {
                             className={styles.input_text}
                             {...formik.getFieldProps('email')} />
                         <span className='icon flex items-center px-4' >
-                            <HiAtSymbol size={25}/>
+                            <HiAtSymbol size={25} />
                         </span>
                     </div>
                     {formik.errors.email && formik.touched.email ? <span className='text-rose-500'>{formik.errors.email}</span> : <></>}
@@ -79,8 +89,8 @@ const Register =  () => {
                             placeholder='Šifra'
                             className={styles.input_text}
                             {...formik.getFieldProps('password')} />
-                                            <span className='icon flex items-center px-4' onClick={() => setShow({...show, password: !show.password})}>
-                            <HiFingerPrint size={25}/>
+                        <span className='icon flex items-center px-4' onClick={() => setShow({ ...show, password: !show.password })}>
+                            <HiFingerPrint size={25} />
                         </span>
                     </div>
                     {formik.errors.password && formik.touched.password ? <span className='text-rose-500'>{formik.errors.password}</span> : <></>}
@@ -91,8 +101,8 @@ const Register =  () => {
                             placeholder='Potvrdite šifru '
                             className={styles.input_text}
                             {...formik.getFieldProps('cpassword')} />
-                                            <span className='icon flex items-center px-4' onClick={() => setShow({...show, cpassword: !show.cpassword})}>
-                            <HiFingerPrint size={25}/>
+                        <span className='icon flex items-center px-4' onClick={() => setShow({ ...show, cpassword: !show.cpassword })}>
+                            <HiFingerPrint size={25} />
                         </span>
                     </div>
                     {formik.errors.cpassword && formik.touched.cpassword ? <span className='text-rose-500'>{formik.errors.cpassword}</span> : <></>}
@@ -105,7 +115,7 @@ const Register =  () => {
                 <p className='text-center text-gray-400'>
                     Imate nalog? <Link href='/login' legacyBehavior><a className='text-blue-700'>Prijavite se</a></Link>
                 </p>
-            </section>
+            </motion.section>
         </AuthLayout>
     )
 }

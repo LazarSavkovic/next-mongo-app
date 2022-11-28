@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
 import styles from '../styles/Dashboard.module.css'
 import { useEffect, useState } from 'react'
+import {motion} from 'framer-motion'
 
 const Dashboard = ({ children, session }) => {
     let [open, setOpen] = useState(false);
@@ -37,11 +38,15 @@ const Dashboard = ({ children, session }) => {
 
     }, [flat]) 
 
-    
+    const variants = {
+        open: { opacity: 1, y: 0 },
+        closed: { opacity: 0, y: "-100%" },
+      }    
 
     return (
         <>
-            <aside className={`fixed z-10 top-14 pb-3 px-6 w-full flex flex-col h-screen border-r bg-white transition-all duration-300 w-6/12  sm:w-5/12 md:w-4/12  lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%] ${open ? '' : 'ml-[-100%] '}`}>
+            <motion.aside 
+       className={`fixed bg-blue-400 z-10 top-14 pb-3 px-6 w-full flex flex-col h-screen border-r bg-white transition-all duration-300 w-6/12  sm:w-5/12 md:w-4/12  lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%] ${open ? '' : 'ml-[-100%] '}`}>
                 <div >
                     <div className="mt-16 text-center">
                         <img src={session.user.image} alt="" className="w-10 h-10 m-auto rounded-full object-cover lg:w-24 lg:h-24" />
@@ -102,14 +107,14 @@ const Dashboard = ({ children, session }) => {
                 </div>
 
                 <div className="px-6 -mx-6 pt-4 flex justify-between items-center border-t">
-                    <button onClick={handleSignOut} className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <button onClick={handleSignOut} className="hover:scale-105 focus:scale-95 transition-all px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
                         <span className="group-hover:text-gray-700">Odjavi se</span>
                     </button>
                 </div>
-            </aside>
+            </motion.aside>
             <div className="lg:ml-auto mb-6 lg:w-[68%] xl:w-[74%] 2xl:w-[81%]">
                 <div className="sticky z-5 top-0 h-16 border-b bg-white lg:py-2.5">
                     <div className="px-6 flex items-center justify-between space-x-4 2xl:container">
@@ -119,7 +124,7 @@ const Dashboard = ({ children, session }) => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
-                        <div className="flex space-x-4">
+                        <div className="flex space-x-4 ">
                             {/* search bar  */}
                             <div hidden className="md:block">
                                 <div className="relative flex items-center text-gray-400 focus-within:text-cyan-400">

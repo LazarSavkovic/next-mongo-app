@@ -42,10 +42,10 @@ function User({ session, handleSignOut }) {
 
 
       <div className='flex justify-center'>
-        <Link href='/flats/new' legacyBehavior><a className='mt-5 px-10 py-3 w-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md text-gray-50'>Nova Nekretnina</a></Link>
+        <Link href='/flats/new' legacyBehavior><a className='hover:scale-105 focus:scale-95 transition-all mt-5 px-10 py-3 w-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md text-gray-50'>Nova Nekretnina</a></Link>
       </div>
       <div className='flex justify-center'>
-        <Link href='/flats' legacyBehavior><a className='mt-5 px-10 py-3 w-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md text-gray-50'>Nekretnine</a></Link>
+        <Link href='/flats' legacyBehavior><a className='hover:scale-105 focus:scale-95 transition-all mt-5 px-10 py-3 w-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md text-gray-50'>Nekretnine</a></Link>
       </div>
     </div>
   )

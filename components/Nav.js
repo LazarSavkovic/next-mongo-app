@@ -3,12 +3,12 @@ import Button from './Button';
 import Link from 'next/link';
 import { useRouter } from 'next/router'
 import { useSession, signOut } from 'next-auth/react'
+import {motion} from 'framer-motion'
 
 
 
 const Nav = () => {
     let Links = [
-        { name: "POČETNA", link: "/" },
         { name: "MOJE NEKRETNINE", link: "/flats" },
         { name: "TRŽIŠTE", link: "/apts" },
         { name: "NOVA NEKRETNINA", link: "/apts/new" },
@@ -29,15 +29,22 @@ const Nav = () => {
         router.push('/register')
     }
     return (
-        <div className='shadow-md w-full fixed top-0 left-0 z-50'>
+        <motion.div
+        initial={{y: 25, opacity: 0}}
+        animate={{y: 0, opacity: 1}}
+        transition={{
+            delay: 0.4,
+            duration: 0.75
+        }}
+
+         className='shadow-md w-full fixed top-0 left-0 z-50'>
             <div className='md:flex items-center justify-between bg-white py-4 md:px-10 px-7'>
-                <div className='font-bold text-l cursor-pointer flex items-center font-[Poppins] 
-      text-gray-800'>
-                    <span className='text-2xl text-indigo-600 mr-1 pt-2'>
+                <Link href='/' legacyBehavior><a className='font-bold text-l cursor-pointer flex items-center font-[Poppins] text-gray-800'>
+                    <span className='text-2xl text-indigo-600 mr-1'>
                         <ion-icon name="logo-ionic"></ion-icon>
                     </span>
-                    PROCENA/NEKRETNINE
-                </div>
+                    PROCENA/NEKRETNINE</a>
+                </Link>
 
                 <div onClick={() => setOpen(!open)} className='text-3xl absolute right-8 top-6 cursor-pointer md:hidden'>
                     <ion-icon name={open ? 'close' : 'menu'}></ion-icon>
@@ -46,7 +53,7 @@ const Nav = () => {
                 <ul className={`md:flex md:items-center md:pb-0 pb-12 absolute text-sm md:static bg-white md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-500 ease-in ${open ? 'top-20 ' : 'top-[-490px]'}`}>
                     {
                         Links.map((link) => (
-                            <li key={link.name} className='md:ml-8 md:my-0 my-7'>
+                            <li key={link.name} className='hover:scale-105 focus:scale-95 transition-all md:ml-8 md:my-0 my-7'>
                                 <Link href={link.link} legacyBehavior><a className='text-gray-800 hover:text-gray-400 duration-500'>{link.name}</a></Link>
                             </li>
                         ))
@@ -57,7 +64,7 @@ const Nav = () => {
 
                 </ul>
             </div>
-        </div>
+        </motion.div>
     )
 }
 
