@@ -1,20 +1,17 @@
 import {  getSession } from 'next-auth/react'
 import Dashboard from '../../components/Dashboard'
-import Map, { Source, Layer } from 'react-map-gl';
+import Map, { Source, Layer, Marker, Popup } from 'react-map-gl';
 import { useState } from 'react'
+import {getCenter} from 'geolib'
 
 
 const Maps = ({ flats, session }) => {
 
-    const geojson = {
-        type: 'FeatureCollection',
-        features: []
-    };
 
+    const [selectedLocation, setSelectedLocation] = useState({});
 
-    for (let flat of flats) {
-        geojson.features.push({ type: 'Feature', geometry: { type: 'Point', coordinates: [flat.geometry.coordinates[0], flat.geometry.coordinates[1]] } })
-    }
+    const coordinates = flats.map(flat => ({longitude: flat.geometry.coordinates[0], latitude: flat.geometry.coordinates[1]}));
+    const center = getCenter(coordinates);
 
     const layerStyle = {
         id: 'point',
@@ -26,8 +23,8 @@ const Maps = ({ flats, session }) => {
     };
 
     const [viewState, setViewState] = useState({
-        longitude: flats[0].geometry.coordinates[0],
-        latitude: flats[0].geometry.coordinates[1],
+        longitude: center.longitude,
+        latitude: center.latitude,
         zoom: 14
     });
 
@@ -41,9 +38,42 @@ const Maps = ({ flats, session }) => {
             style={{ width: 600, height: 400 }}
             mapStyle="mapbox://styles/mapbox/streets-v11"
             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}>
-            <Source id="my-data" type="geojson" data={geojson}>
-                <Layer {...layerStyle} />
-            </Source></Map>
+            {flats.map(flat => (
+                <div key={flat.geometry.coordinates[0]}>
+                    <Marker
+                    longitude={flat.geometry.coordinates[0]}
+                    latitude={flat.geometry.coordinates[1]}
+                    offsetLeft={-20}
+                    offsetTop={-10}
+                    >
+                        <p 
+                        role='img'
+                        onClick={() => setSelectedLocation({
+                            title: flat.title,
+                            longitude: flat.geometry.coordinates[0],
+                            latitude: flat.geometry.coordinates[1]
+                        })}
+                        className='cursor-pointer text-2xl animate-bounce'
+                        aria-label='push-pin'>🏠</p>
+                        
+                    </Marker>
+                    {selectedLocation.longitude === flat.geometry.coordinates[0] ? (
+                        <Popup
+                        onClose={() => setSelectedLocation({})}
+                        closeOnClick={true}
+                        longitude={flat.geometry.coordinates[0]}
+                        latitude={flat.geometry.coordinates[1]}
+                        >
+                            {flat.title}
+                        </Popup>
+
+                    ):(
+                        false
+                    )}
+                </div>
+            ))}
+            </Map>
+
         </Dashboard>
 
       </div>
