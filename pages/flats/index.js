@@ -1,6 +1,5 @@
-import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
-import { useSession, getSession } from 'next-auth/react'
+import {  getSession } from 'next-auth/react'
 import FlatCard from '../../components/FlatComponents/FlatCard'
 
 import Dashboard from '../../components/Dashboard'

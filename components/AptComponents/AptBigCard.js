@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Button from '../Button'
 import AptMap from './AptMap'
+import AptMaps from './AptMaps'
 
 
 const AptBigCard = ({ apt, handleDelete }) => {
@@ -19,7 +20,7 @@ const AptBigCard = ({ apt, handleDelete }) => {
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Povrsina: {apt.sq_mt} m<sup>2</sup></p>
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Broj soba: {apt.rooms}</p>
                 <div className="flex justify-between items-center">
-                    <AptMap latitude={apt.lat} longitude={apt.long} />
+                    <AptMaps latitude={apt.lat} longitude={apt.long} />
                 </div>
                 <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold text-gray-900 dark:text-white">{apt.price} €</span>

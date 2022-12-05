@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Button from '../Button'
-import FlatMap from './FlatMap'
+import FlatMaps from './FlatMaps'
 import { motion } from 'framer-motion'
 
 const FlatBigCard = ({ flat, handleDelete }) => {
@@ -12,7 +12,7 @@ const FlatBigCard = ({ flat, handleDelete }) => {
             transition={{ duration: 0.3 }}
             className="flex flex-col items-center bg-white border rounded-lg shadow-md md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 w-full m-0">
             <div className="flex justify-between items-center w-2/4">
-                <FlatMap latitude={flat.geometry.coordinates[1]} longitude={flat.geometry.coordinates[0]} />
+                <FlatMaps latitude={flat.geometry.coordinates[1]} longitude={flat.geometry.coordinates[0]} />
             </div>
             <div className="flex flex-col justify-between p-4 leading-normal w-2/4">
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{flat.title}</h5>

@@ -82,6 +82,17 @@ const Dashboard = ({ children, session }) => {
                             </Link>
                         </li>
                         <li>
+                            <Link legacyBehavior href="/flats/maps" >
+                                <a href="#" className={router.pathname === '/flats/maps' ? styles.active_dashboard_btn : styles.inactive_dashboard_btn}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path className="fill-current text-gray-600 group-hover:text-cyan-600" d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+                                        <path className="fill-current text-gray-300 group-hover:text-cyan-300" d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
+                                    </svg>
+                                    <span className="group-hover:text-gray-700">Mapa Nekretnina</span>
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
                             <Link legacyBehavior href="/apts" >
                                 <a href="#" className={router.pathname === '/apts' ? styles.active_dashboard_btn : styles.inactive_dashboard_btn}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -92,17 +103,7 @@ const Dashboard = ({ children, session }) => {
                                 </a>
                             </Link>
                         </li>
-                        <li>
-                            <Link legacyBehavior href="/map" >
-                                <a href="#" className={router.pathname === '/map' ? styles.active_dashboard_btn : styles.inactive_dashboard_btn}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path className="fill-current text-gray-600 group-hover:text-cyan-600" d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                                        <path className="fill-current text-gray-300 group-hover:text-cyan-300" d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-                                    </svg>
-                                    <span className="group-hover:text-gray-700">Mapa</span>
-                                </a>
-                            </Link>
-                        </li>
+
                     </ul>
                 </div>
 
