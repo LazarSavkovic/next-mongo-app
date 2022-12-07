@@ -11,7 +11,6 @@ const Nav = () => {
     let Links = [
         { name: "MOJE NEKRETNINE", link: "/flats" },
         { name: "TRŽIŠTE", link: "/apts" },
-        { name: "NOVA NEKRETNINA", link: "/apts/new" },
         { name: "KONTAKT", link: "/" },
     ];
     let [open, setOpen] = useState(false);

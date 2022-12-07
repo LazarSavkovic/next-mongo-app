@@ -144,7 +144,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
 
   return (
     <>
-      <form id={formId} onSubmit={handleSubmit}>
+      <form className='w-[100%] md:w-3/4 lg:w-[65%] xl:w-[60%]' id={formId} onSubmit={handleSubmit}>
         <div className="mb-6">
           <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Naziv</label>
           <input

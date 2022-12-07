@@ -21,8 +21,10 @@ const NewFlat = ({ userId, session }) => {
   return (
     <div className="container mx-auto my-28 w-3/4" >
       <div className='grid grid-cols-1'>
-        <Dashboard session={session}>
-          <FlatForm formId="add-flat-form" flatForm={flatForm} userId={userId} />
+        <Dashboard session={session} >
+          <div className='flex items-center justify-center'>
+            <FlatForm formId="add-flat-form" flatForm={flatForm} userId={userId} />
+          </div>
         </Dashboard>
       </div>
     </div>

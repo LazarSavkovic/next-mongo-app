@@ -20,7 +20,7 @@ const PredictNewFlat = () => {
 
   return (
     <div className="container mx-auto my-28 w-3/4" >
-      <div className='grid grid-cols-1'>
+      <div className='flex justify-center'>
           <FlatForm formId="add-flat-form" flatForm={flatForm} justPredict={true} />
       </div>
     </div>

@@ -11,7 +11,7 @@ const Flats = ({ flats, session }) => {
     <div className="container mx-auto my-28 w-3/4" >
       <div className='grid grid-cols-1'>
         <Dashboard session={session}>
-        <div className={styles.container}>
+        <div className='flex flex-col items-center'>
         {flats.map((flat) => (
           <FlatCard key={flat._id} flat={flat} />
         ))}

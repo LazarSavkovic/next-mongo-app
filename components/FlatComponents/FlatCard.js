@@ -10,7 +10,7 @@ const FlatCard = ({ flat, predicted }) => {
         //     rotate: [0, 0, 270, 270, 0],
         //     borderRadius: ["20%", "20%", "50%", "50%", "20%"],
         // }}
-            className="max-w-lg bg-white rounded-lg border border-gray-200 shadow-md m-5">
+            className="max-w-lg bg-white rounded-lg border w-[100%] md:w-[80%] xl:w-3/4 border-gray-200 shadow-md m-5">
             {flat.image && <a href="#">
                 <img className="rounded-t-lg" src={flat.image} alt={flat.title} />
             </a>}
