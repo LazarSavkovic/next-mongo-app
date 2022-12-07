@@ -23,13 +23,13 @@ const AptPage = ({ apt }) => {
 
   return (
 
-    <div className="container mx-auto my-40 w-3/4" >
-      <div className='grid grid-cols-1'>
+    <div className="flex bg-blue-400">
+      <div className="m-auto bg-slate-50 rounded-md w-3/5 mt-24 pt-16 flex justify-center">
 
-          <AptBigCard key={apt._id} apt={apt} handleDelete={handleDelete}/>
-          
+        <AptBigCard key={apt._id} apt={apt} handleDelete={handleDelete} />
 
-          {message && <p>{message}</p>}
+
+        {message && <p>{message}</p>}
       </div>
     </div>
   )
@@ -38,9 +38,9 @@ const AptPage = ({ apt }) => {
 export async function getServerSideProps({ params }) {
 
   const fetcher = (url) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((json) => json.data)
+    fetch(url)
+      .then((res) => res.json())
+      .then((json) => json.data)
 
   const url = `${process.env.API_URL}/apts/${params.id}`
 

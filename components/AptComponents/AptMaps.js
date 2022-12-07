@@ -30,7 +30,7 @@ const AptMaps = ({ longitude, latitude }) => {
     return (<Map
             {...viewState}
             onMove={evt => setViewState(evt.viewState)}
-            style={{ width: 600, height: 400 }}
+            style={{ width: '100%', height: 350 }}
             mapStyle="mapbox://styles/mapbox/streets-v11"
             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}>
             <Source id="my-data" type="geojson" data={geojson}>

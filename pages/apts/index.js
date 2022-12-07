@@ -20,12 +20,12 @@ const Index = ({ apts }) => {
 
   return (
 
-      <div className="flex h-screen bg-blue-400">
-        <div className="m-auto bg-slate-50 rounded-md w-3/5 min-h-[75%] mt-24 pt-16">
+      <div className="flex bg-blue-400">
+        <div className="m-auto bg-slate-50 rounded-md w-3/5 mt-24 pt-16">
           <h1 className="text-3xl text-center tracking-wider">
             Nekretnine u Beogradu
           </h1>
-          <motion.div className='grid lg:grid-cols-2'
+          <motion.div className='grid lg:grid-cols-2 m-auto pt-10 justify-center'
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}>
