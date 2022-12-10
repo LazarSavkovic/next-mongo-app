@@ -1,11 +1,17 @@
 import AptCard from '../../components/AptComponents/AptCard'
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Pagination from "../../components/Pagination";
 import { paginate } from "../../lib/paginate";
 import { motion } from 'framer-motion'
+import { dehydrate, QueryClient, useQuery } from 'react-query';
+
+import { getApts } from '../../lib/ApiCalls';
 
 
-const Index = ({ apts }) => {
+const Index = () => {
+
+  const { data: apts } = useQuery('apts', getApts)
+ 
   const [posts, setPosts] = useState([...apts]);
 
   const pageSize = 10;
@@ -20,32 +26,32 @@ const Index = ({ apts }) => {
 
   return (
 
-      <div className="flex bg-blue-400">
-        <div className="m-auto bg-slate-50 rounded-md w-3/5 mt-24 pt-16">
-          <h1 className="text-3xl text-center tracking-wider">
-            Nekretnine u Beogradu
-          </h1>
-          <motion.div className='grid lg:grid-cols-2 m-auto pt-10 justify-center'
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}>
+    <div className="flex bg-blue-400">
+      <div className="m-auto bg-slate-50 rounded-md w-3/5 mt-24 pt-16">
+        <h1 className="text-3xl text-center tracking-wider">
+          Nekretnine u Beogradu
+        </h1>
+        <motion.div className='grid lg:grid-cols-2 m-auto pt-10 justify-center'
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}>
 
 
-            {paginatedPosts.map((apt) => (
-              <AptCard key={apt._id} apt={apt} />
-            ))}
+          {paginatedPosts.map((apt) => (
+            <AptCard key={apt._id} apt={apt} />
+          ))}
 
-            <Pagination
-              items={posts.length}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-            />
-          </motion.div>
+          <Pagination
+            items={posts.length}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+        </motion.div>
 
 
-        </div>
       </div>
+    </div>
 
   )
 }
@@ -53,17 +59,15 @@ const Index = ({ apts }) => {
 /* Retrieves pet(s) data from mongodb database */
 export async function getServerSideProps() {
 
-  /* find all the data in our database */
-  const url = `${process.env.API_URL}/apts?limit=100`
+  const queryClient = new QueryClient()
 
-  /* find all the data in our database */
-  const response = await fetch(url);
-  const result = await response.json();
+  await queryClient.prefetchQuery('apts', getApts)
 
-  const apts = result.data;
-
-
-  return { props: { apts: apts } }
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  }
 }
 
 export default Index

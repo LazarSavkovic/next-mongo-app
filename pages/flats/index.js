@@ -1,26 +1,30 @@
-import styles from '../../styles/Home.module.css'
-import {  getSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import FlatCard from '../../components/FlatComponents/FlatCard'
-
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Dashboard from '../../components/Dashboard'
+import { getFlats } from '../../lib/ApiCalls'
 
 
 
-const Flats = ({ flats, session }) => {
+const Flats = () => {
+
+  const { data: session } = useSession();
+
+  const { data: flats } = useQuery('flats', () => getFlat(session.user._id))
+
   return (
     <div className="container mx-auto my-28 w-3/4" >
       <div className='grid grid-cols-1'>
-        <Dashboard session={session}>
-        <div className='flex flex-col items-center'>
-        {flats.map((flat) => (
-          <FlatCard key={flat._id} flat={flat} />
-        ))}
-        </div>
-        </Dashboard>
+        {session && <Dashboard session={session}>
+          <div className='flex flex-col items-center'>
+            {flats.map((flat) => (
+              <FlatCard key={flat._id} flat={flat} />
+            ))}
+          </div>
+        </Dashboard>}
 
       </div>
     </div>
-
 
   )
 }
@@ -37,20 +41,14 @@ export async function getServerSideProps({ req }) {
     }
   }
 
-  const url = `${process.env.API_URL}/flats?id=${session.user._id}`
+  const queryClient = new QueryClient()
 
-  /* find all the data in our database */
-  const response = await fetch(url);
-  const result = await response.json();
-
-
-  const flats = result.data;
+  await queryClient.prefetchQuery('flats', () => getFlats(session.user._id))
 
   return {
     props: {
-      session: session,
-      flats: flats
-    }
+      dehydratedState: dehydrate(queryClient)
+    },
   }
 }
 

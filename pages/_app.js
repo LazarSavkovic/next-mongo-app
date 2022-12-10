@@ -5,10 +5,14 @@ import "../styles/globals.css";
 import { SessionProvider } from 'next-auth/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter } from 'next/router'
+import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
+import { useState } from 'react'
 
 
 
 function MyApp({ Component, pageProps }) {
+
+  const [queryClient] = useState(() => new QueryClient())
 
   const router = useRouter()
 
@@ -21,8 +25,11 @@ function MyApp({ Component, pageProps }) {
       <Script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" />
       <Script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js" />
       <Script src='https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js' />
+
       <SessionProvider session={pageProps.session}>
-        {/* <AnimatePresence exitBeforeEnter>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            {/* <AnimatePresence exitBeforeEnter>
           <motion.div
             key={router.route}
             initial='initialState'
@@ -54,8 +61,12 @@ function MyApp({ Component, pageProps }) {
 
 
             </Layout>
-        {/* </AnimatePresence> */}
+            {/* </AnimatePresence> */}
+          </Hydrate>
+        </QueryClientProvider>
       </SessionProvider>
+
+
     </>
   )
 }

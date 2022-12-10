@@ -2,17 +2,29 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import AptBigCard from '../../../components/AptComponents/AptBigCard'
+import { getApt } from '../../../lib/ApiCalls'
+
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 
 
 /* Allows you to view apt card info and delete apt card*/
-const AptPage = ({ apt }) => {
-  const router = useRouter()
-  const [message, setMessage] = useState('')
-  const handleDelete = async () => {
-    const aptID = router.query.id
+const AptPage = () => {
 
+
+  const router = useRouter()
+  const id = router.query.id;
+
+
+  const { data: apt } = useQuery(['apts', id], () => getApt(id))
+
+
+  const [message, setMessage] = useState('')
+
+
+
+  const handleDelete = async () => {
     try {
-      await fetch(`/api/apts/${aptID}`, {
+      await fetch(`/api/apts/${id}`, {
         method: 'Delete',
       })
       router.push('/')
@@ -37,20 +49,17 @@ const AptPage = ({ apt }) => {
 
 export async function getServerSideProps({ params }) {
 
-  const fetcher = (url) =>
-    fetch(url)
-      .then((res) => res.json())
-      .then((json) => json.data)
+  const id = params.id;
 
-  const url = `${process.env.API_URL}/apts/${params.id}`
+  const queryClient = new QueryClient()
 
-  /* find all the data in our database */
-  const response = await fetch(url);
-  const result = await response.json();
+  await queryClient.prefetchQuery(['apts', id], () => getApt(id))
 
-  const apt = result.data;
-
-  return { props: { apt } }
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient)
+    },
+  }
 }
 
 export default AptPage
