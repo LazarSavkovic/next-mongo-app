@@ -1,15 +1,19 @@
 import { getSession } from 'next-auth/react'
 import Dashboard from '../../components/Dashboard'
-import Map, { Source, Layer, Marker, Popup } from 'react-map-gl';
+import Map, { Marker, Popup } from 'react-map-gl';
 import { useState } from 'react'
 import { getCenter } from 'geolib'
+import { getFlats } from '../../lib/ApiCalls'
+
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 
 
-const Maps = ({ flats, session }) => {
-
+const Maps = ({ session }) => {
 
     const [selectedLocation, setSelectedLocation] = useState({});
     const [showPopup, setShowPopup] = useState(false);
+
+    const { data: flats } = useQuery('flats', () => getFlats(session.user._id))
 
 
     const coordinates = flats.map(flat => ({ longitude: flat.geometry.coordinates[0], latitude: flat.geometry.coordinates[1] }));
@@ -64,7 +68,8 @@ const Maps = ({ flats, session }) => {
                                         role='img'
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            changeSelectedFlat(flat)}}
+                                            changeSelectedFlat(flat)
+                                        }}
                                         className='cursor-pointer text-2xl animate-bounce'
                                         aria-label='push-pin'>🏠</p>
 
@@ -105,19 +110,18 @@ export async function getServerSideProps({ req }) {
         }
     }
 
-    const url = `${process.env.NEXT_API_URL}/flats?id=${session.user._id}`
 
-    /* find all the data in our database */
-    const response = await fetch(url);
-    const result = await response.json();
+    const queryClient = new QueryClient()
+
+    await queryClient.prefetchQuery('flats', () => getFlats(session.user._id))
 
 
-    const flats = result.data;
 
     return {
         props: {
-            session: session,
-            flats: flats
+
+            dehydratedState: dehydrate(queryClient),
+            session: session
         }
     }
 }

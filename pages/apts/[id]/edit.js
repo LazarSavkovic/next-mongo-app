@@ -1,16 +1,16 @@
 import { useRouter } from 'next/router'
-import useSWR from 'swr'
 import AptForm from '../../../components/AptComponents/AptForm'
+import { dehydrate, QueryClient, useQuery } from 'react-query';
+import { getApt } from '../../../lib/ApiCalls'
 
-const fetcher = (url) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((json) => json.data)
+
 
 const EditApt = () => {
   const router = useRouter()
   const { id } = router.query
-  const { data: apt, error } = useSWR(id ? `/api/apts/${id}` : null, fetcher)
+
+  const { data: apt, error } = useQuery(['apts', id], () => getApt(id))
+
 
   if (error) return <p>Failed to load</p>
   if (!apt) return <p>Loading...</p>
@@ -34,5 +34,22 @@ const EditApt = () => {
     </div>
   )
 }
+
+
+export async function getServerSideProps({ params }) {
+
+  const id = params.id;
+
+  const queryClient = new QueryClient()
+
+  await queryClient.prefetchQuery(['apts', id], () => getApt(id))
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient)
+    },
+  }
+}
+
 
 export default EditApt

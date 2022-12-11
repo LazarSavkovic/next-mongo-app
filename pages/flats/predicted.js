@@ -1,8 +1,6 @@
 import styles from '../../styles/Home.module.css'
 import { getSession } from 'next-auth/react'
 import FlatCard from '../../components/FlatComponents/FlatCard'
-
-import Dashboard from '../../components/Dashboard'
 import { useEffect, useState } from 'react'
 
 

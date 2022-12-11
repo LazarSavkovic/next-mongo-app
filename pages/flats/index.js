@@ -6,11 +6,10 @@ import { getFlats } from '../../lib/ApiCalls'
 
 
 
-const Flats = () => {
+const Flats = ({session}) => {
 
-  const { data: session } = useSession();
 
-  const { data: flats } = useQuery('flats', () => getFlat(session.user._id))
+  const { data: flats } = useQuery('flats', () => getFlats(session.user._id))
 
   return (
     <div className="container mx-auto my-28 w-3/4" >
@@ -47,7 +46,8 @@ export async function getServerSideProps({ req }) {
 
   return {
     props: {
-      dehydratedState: dehydrate(queryClient)
+      dehydratedState: dehydrate(queryClient),
+      session: session
     },
   }
 }

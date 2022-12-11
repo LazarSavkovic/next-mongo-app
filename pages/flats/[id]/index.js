@@ -1,25 +1,20 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import FlatBigCard from '../../../components/FlatComponents/FlatBigCard'
-import { getSession, useSession } from 'next-auth/react'
+import { getSession } from 'next-auth/react'
 import Dashboard from '../../../components/Dashboard'
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { getFlat } from '../../../lib/ApiCalls'
 
 
 /* Allows you to view apt card info and delete apt card*/
-const FlatPage = () => {
+const FlatPage = ({session, userId, flatId}) => {
+
   const router = useRouter()
-  const flatId = router.query.id
   const [message, setMessage] = useState('')
-  const { data: session } = useSession();
-
-  console.log(session)
 
 
-  const { data: flat } = useQuery(['flats', flatId], () => getFlat({ userId: session.user._id, flatId: flatId }))
-
-
+  const { data: flat } = useQuery(['flats', flatId], () => getFlat({ userId, flatId}))
 
   const handleDelete = async () => {
 
@@ -70,7 +65,10 @@ export async function getServerSideProps({ params, req }) {
 
   return {
     props: {
-      dehydratedState: dehydrate(queryClient)
+      dehydratedState: dehydrate(queryClient),
+      session: session,
+      userId: session.user._id,
+      flatId: params.id
     },
   }
 }
