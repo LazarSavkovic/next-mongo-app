@@ -1,14 +1,16 @@
 import FlatForm from '../../../components/FlatComponents/FlatForm'
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { getFlat } from '../../../lib/ApiCalls'
-import { getSession,  } from 'next-auth/react'
+import { getSession, } from 'next-auth/react'
+
+import Dashboard from '../../../components/Dashboard'
 
 
 
 
-const EditFlat = ({ userId, flatId}) => {  
+const EditFlat = ({ session, userId, flatId }) => {
 
-  const { data: flat, error } = useQuery(['flats', flatId], () => getFlat({ userId, flatId}))
+  const { data: flat, error } = useQuery(['flats', flatId], () => getFlat({ userId, flatId }))
 
 
   if (error) return <p>Failed to load</p>
@@ -24,9 +26,13 @@ const EditFlat = ({ userId, flatId}) => {
   }
 
   return (
-    <div className="container mx-auto my-40 w-2/4" >
+    <div className="container mx-auto my-28 w-3/4" >
       <div className='grid grid-cols-1'>
-        <FlatForm formId="edit-flat-form" flatForm={flatForm} forNewFlat={false} />
+        <Dashboard session={session} >
+          <div className='flex items-center justify-center'>
+            <FlatForm formId="edit-flat-form" flatForm={flatForm} forNewFlat={false} />
+          </div>
+        </Dashboard>
       </div>
     </div>
   )

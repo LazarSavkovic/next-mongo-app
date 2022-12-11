@@ -8,18 +8,15 @@ import { dehydrate, QueryClient, useQuery } from 'react-query';
 
 
 /* Allows you to view apt card info and delete apt card*/
-const AptPage = () => {
-
+const AptPage = ({id}) => {
 
   const router = useRouter()
-  const id = router.query.id;
 
 
   const { data: apt } = useQuery(['apts', id], () => getApt(id))
 
 
   const [message, setMessage] = useState('')
-
 
 
   const handleDelete = async () => {
@@ -57,7 +54,8 @@ export async function getServerSideProps({ params }) {
 
   return {
     props: {
-      dehydratedState: dehydrate(queryClient)
+      dehydratedState: dehydrate(queryClient),
+      id: id
     },
   }
 }

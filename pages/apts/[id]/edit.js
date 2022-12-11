@@ -5,9 +5,8 @@ import { getApt } from '../../../lib/ApiCalls'
 
 
 
-const EditApt = () => {
+const EditApt = ({id}) => {
   const router = useRouter()
-  const { id } = router.query
 
   const { data: apt, error } = useQuery(['apts', id], () => getApt(id))
 
@@ -46,7 +45,8 @@ export async function getServerSideProps({ params }) {
 
   return {
     props: {
-      dehydratedState: dehydrate(queryClient)
+      dehydratedState: dehydrate(queryClient),
+      id: id
     },
   }
 }
