@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { mutate } from 'swr'
+import { postApt, updateApt } from '../../lib/ApiCalls'
+import { useMutation, QueryClient } from 'react-query'
 
 const AptForm = ({ formId, aptForm, forNewApt = true }) => {
   const router = useRouter()
-  const contentType = 'application/json'
   const [errors, setErrors] = useState({})
   const [message, setMessage] = useState('')
 
@@ -19,28 +19,46 @@ const AptForm = ({ formId, aptForm, forNewApt = true }) => {
     long: aptForm.long,
   })
 
+  const queryClient = new QueryClient()
+
+  const postAptMutation = useMutation((someForm) => postApt(someForm), {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['apts'] })
+    }
+  })
+
+  const putAptMutation = useMutation(({ form, id }) => updateApt({ form, id }), {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['apts'] })
+    }
+  })
+
+
   /* The PUT method edits an existing entry in the mongodb database. */
   const putData = async (form) => {
     const { id } = router.query
 
     try {
-      const res = await fetch(`/api/apts/${id}`, {
-        method: 'PUT',
-        headers: {
-          Accept: contentType,
-          'Content-Type': contentType,
-        },
-        body: JSON.stringify(form),
-      })
 
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status)
+      if (form.floor) {
+        putAptMutation.mutate({ form, id })
+      } else {
+        const noFloorForm = form;
+        delete noFloorForm.floor;
+        putAptMutation.mutate({ form: noFloorForm, id })
+
       }
 
-      const { data } = await res.json()
 
-      mutate(`/api/apts/${id}`, data, false) // Update the local data without a revalidation
+      // Throw error with status code in case Fetch API req failed
+      if (putAptMutation.isError) {
+        console.log('some error')
+        throw new Error(putAptMutation.error.message)
+
+      }
+
+      console.log('about to reroute')
+
       router.push('/')
     } catch (error) {
       setMessage('Failed to update apt')
@@ -50,18 +68,13 @@ const AptForm = ({ formId, aptForm, forNewApt = true }) => {
   /* The POST method adds a new entry in the mongodb database. */
   const postData = async (form) => {
     try {
-      const res = await fetch('/api/apts', {
-        method: 'POST',
-        headers: {
-          Accept: contentType,
-          'Content-Type': contentType,
-        },
-        body: JSON.stringify(form),
-      })
+
+      postAptMutation.mutate(form)
+
 
       // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status)
+      if (postAptMutation.isError) {
+        throw new Error(postAptMutation.error.message)
       }
 
       router.push('/')
@@ -89,7 +102,7 @@ const AptForm = ({ formId, aptForm, forNewApt = true }) => {
     if (!form.short_description) err.short_description = 'Opis je obavezno polje'
     if (!form.sq_mt) err.sq_mt = 'Povrsina je obavezno polje'
     if (!form.rooms) err.rooms = 'Broj soba je obavezno polje'
-    if (!form.floor) err.floor = 'Sprat je obavezno polje'
+    if (aptForm.floor && !form.floor) err.floor = 'Sprat je obavezno polje'
     if (!form.lat) err.lat = 'Latituda je obavezno polje'
     if (!form.long) err.long = 'Longituda je obavezno polje'
     return err
@@ -110,90 +123,90 @@ const AptForm = ({ formId, aptForm, forNewApt = true }) => {
     <>
       <form id={formId} onSubmit={handleSubmit}>
         <div className="mb-6">
-        <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Naziv</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          type="text"
-          maxLength="20"
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Naziv</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            type="text"
+            maxLength="40"
+            name="title"
+            value={form.title}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="mb-6">
-        <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Cena</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          type="number"
-          maxLength="20"
-          name="price"
-          value={form.price}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Cena</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            type="number"
+            maxLength="10"
+            name="price"
+            value={form.price}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="mb-6">
-        <label htmlFor="short_description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Kratak opis</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          type="text"
-          maxLength="30"
-          name="short_description"
-          value={form.short_description}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="short_description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Kratak opis</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            type="text"
+            maxLength="50"
+            name="short_description"
+            value={form.short_description}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="mb-6">
-        <label htmlFor="sq_mt" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Povrsina</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          type="number"
-          name="sq_mt"
-          value={form.sq_mt}
-          onChange={handleChange}
-        />
+          <label htmlFor="sq_mt" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Povrsina</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            type="number"
+            name="sq_mt"
+            value={form.sq_mt}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-6">
-        <label htmlFor="rooms" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Broj soba</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          type="number"
-          name="rooms"
-          checked={form.rooms}
-          onChange={handleChange}
-        />
+          <label htmlFor="rooms" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Broj soba</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            type="number"
+            name="rooms"
+            value={form.rooms}
+            onChange={handleChange}
+          />
         </div>
         <div className="mb-6">
-        <label htmlFor="floor" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sprat</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          name="floor"
-          type="number"
-          value={form.floor}
-          onChange={handleChange}
-        />
-                </div>
+          {form.floor && <><label htmlFor="floor" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sprat</label>
+            <input
+              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+              name="floor"
+              type="number"
+              value={form.floor}
+              onChange={handleChange}
+            /></>}
+        </div>
         <div className="mb-6">
-        <label htmlFor="lat" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Latituda</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          name="lat"
-          type="number"
-          value={form.lat}
-          onChange={handleChange}
-        />
-                </div>
+          <label htmlFor="lat" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Latituda</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            name="lat"
+            type="number"
+            value={form.lat}
+            onChange={handleChange}
+          />
+        </div>
         <div className="mb-6">
-        <label htmlFor="long" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Longituda</label>
-        <input
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          name="long"
-          type="number"
-          value={form.long}
-          onChange={handleChange}
-        />
+          <label htmlFor="long" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Longituda</label>
+          <input
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            name="long"
+            type="number"
+            value={form.long}
+            onChange={handleChange}
+          />
         </div>
         <button type="submit" className="text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
           Submit

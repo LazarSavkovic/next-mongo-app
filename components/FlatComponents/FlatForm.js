@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { mutate } from 'swr'
 import mongoose from 'mongoose'
+import { useMutation , QueryClient} from 'react-query'
+import { postFlat, updateFlat } from '../../lib/ApiCalls'
+
 
 const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = false }) => {
   const router = useRouter()
@@ -18,29 +20,36 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
     floor: flatForm.floor
   })
 
+
+  const queryClient = new QueryClient()
+
+  
+  const postFlatMutation = useMutation((someForm) => postFlat(someForm), {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['flats'] })
+    }
+  })
+
+  const putFlatMutation = useMutation(({form, id}) => updateFlat({form, id}), {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['flats'] })
+    }
+  })
+
+
   /* The PUT method edits an existing entry in the mongodb database. */
   const putData = async (form) => {
     const { id } = router.query
 
     try {
-      const res = await fetch(`/api/flats/${id}`, {
-        method: 'PUT',
-        headers: {
-          Accept: contentType,
-          'Content-Type': contentType,
-        },
-        body: JSON.stringify(form),
-      })
+      putFlatMutation.mutate({id, form})
 
       // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status)
+      if (putFlatMutation.isError) {
+        throw new Error(putFlatMutation.error.message)
       }
 
-      const { data } = await res.json()
-
-      mutate(`/api/flats/${id}`, data, false) // Update the local data without a revalidation
-      router.push('/')
+      router.push(`/flats/${id}`)
     } catch (error) {
       setMessage('Failed to update flat')
     }
@@ -87,18 +96,11 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
       formWithAuthor.author = mongoose.Types.ObjectId(userId)
 
       try {
-        const res = await fetch('/api/flats', {
-          method: 'POST',
-          headers: {
-            Accept: contentType,
-            'Content-Type': contentType,
-          },
-          body: JSON.stringify(formWithAuthor),
-        })
+        postFlatMutation.mutate(formWithAuthor)
 
         // Throw error with status code in case Fetch API req failed
-        if (!res.ok) {
-          throw new Error(res.status)
+        if (postFlatMutation.isError) {
+          throw new Error(postFlatMutation.error.message)
         }
 
         router.push('/flats')
@@ -198,7 +200,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             type="number"
             name="rooms"
-            checked={form.rooms}
+            value={form.rooms}
             onChange={handleChange}
           />
         </div>
