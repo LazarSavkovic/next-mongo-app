@@ -47,7 +47,7 @@ const FlatMaps = ({ longitude, latitude, apts }) => {
             >Vaša nekretnina
             </Popup>}
 
-        {apts.map(apt => (
+        {apts && apts.map(apt => (
             <div key={apt._id}>
                 <Marker
                     longitude={apt.long}
