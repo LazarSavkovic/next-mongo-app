@@ -46,7 +46,7 @@ const FlatPage = ({session, userId, flatId}) => {
 
         {session && flat && <Dashboard session={session}>
         <div className='flex pb-3 w-[100%] justify-self-end'>
-        {!apts[0] && <button onClick={showApts} className='button'>Pokaži nekretnine na tržištu</button>}
+        {!apts[0] && <button onClick={showApts} className='button'>Prikaži nekretnine na tržištu</button>}
         {apts[0] && <button onClick={removeApts} className='button'>Skloni nekretnine na tržištu</button>}
         </div>
           <FlatBigCard key={flat._id} flat={flat} handleDelete={handleDelete} apts={apts} />
