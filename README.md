@@ -4,3 +4,4 @@ Things to do:
     -Fix maps
     -Tailwind and style cleanup
     -implement react query
+    -search bar and price slider

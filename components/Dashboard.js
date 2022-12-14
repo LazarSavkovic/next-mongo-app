@@ -5,7 +5,7 @@ import styles from '../styles/Dashboard.module.css'
 import { useEffect, useState } from 'react'
 import {motion} from 'framer-motion'
 
-const Dashboard = ({ children, session }) => {
+const Dashboard = ({ children, session, setSearchInput, searchInput }) => {
     let [open, setOpen] = useState(false);
     let [flat, setFlat] = useState(false);
 
@@ -13,6 +13,10 @@ const Dashboard = ({ children, session }) => {
 
     function handleSignOut() {
         signOut()
+    }
+
+    const handleInputChange = (e) => {
+        setSearchInput(e.target.value)
     }
 
 
@@ -23,6 +27,8 @@ const Dashboard = ({ children, session }) => {
                 return 'Nekretnine';
             case '/flats/new':
                 return 'Unesi novu nekretninu';
+            case '/flats/maps':
+                return 'Mapa nekretnina';
             default:
                 return '';
         }
@@ -118,23 +124,23 @@ const Dashboard = ({ children, session }) => {
             </motion.aside>
             <div className="lg:ml-auto mb-6 lg:w-[68%] xl:w-[74%] 2xl:w-[81%]">
                 <div className="sticky z-5 top-0 h-16 border-b bg-white lg:py-2.5">
-                    <div className="px-6 flex items-center justify-between space-x-4 2xl:container">
+                    <div className="pl-6 flex items-center justify-between space-x-4 2xl:container">
                         <h5 hidden className="text-2xl text-gray-600 font-medium lg:block">{getPlace()}</h5>
                         <button onClick={() => setOpen(!open)} className="w-12 h-16 -mr-2 border-r lg:hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
-                        <div className="flex space-x-4 ">
+                        {(router.pathname === '/flats') && <div className="flex grow justify-end space-x-4">
                             {/* search bar  */}
-                            <div hidden className="md:block">
-                                <div className="relative flex items-center text-gray-400 focus-within:text-cyan-400">
+                            <div hidden className="md:block grow">
+                                <div className="relative flex items-center text-gray-400 focus-within:text-cyan-400 ">
                                     <span className="absolute left-4 h-6 flex items-center pr-3 border-r border-gray-300">
                                         <svg xmlns="http://ww50w3.org/2000/svg" className="w-4 fill-current" viewBox="0 0 35.997 36.004">
                                             <path id="Icon_awesome-search" data-name="search" d="M35.508,31.127l-7.01-7.01a1.686,1.686,0,0,0-1.2-.492H26.156a14.618,14.618,0,1,0-2.531,2.531V27.3a1.686,1.686,0,0,0,.492,1.2l7.01,7.01a1.681,1.681,0,0,0,2.384,0l1.99-1.99a1.7,1.7,0,0,0,.007-2.391Zm-20.883-7.5a9,9,0,1,1,9-9A8.995,8.995,0,0,1,14.625,23.625Z"></path>
                                         </svg>
                                     </span>
-                                    <input type="search" name="leadingIcon" id="leadingIcon" placeholder="Search here" className="w-full pl-14 pr-4 py-2.5 rounded-xl text-sm text-gray-600 outline-none border border-gray-300 focus:border-cyan-300 transition" />
+                                    <input onChange={handleInputChange} value={searchInput} type="search" name="leadingIcon" id="leadingIcon" placeholder="Ukucajte ime nekretnine ovde" className="w-full pl-14 pr-4 py-2.5 rounded-xl text-sm text-gray-600 outline-none border border-gray-300 focus:border-cyan-300 transition" />
                                 </div>
                             </div>
                             {/* /search bar  */}
@@ -153,7 +159,7 @@ const Dashboard = ({ children, session }) => {
                                     <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                                 </svg>
                             </button>
-                        </div>
+                        </div>}
                     </div>
                 </div>
 

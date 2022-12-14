@@ -4,7 +4,7 @@ import FlatBigCard from '../../../components/FlatComponents/FlatBigCard'
 import { getSession } from 'next-auth/react'
 import Dashboard from '../../../components/Dashboard'
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { getFlat } from '../../../lib/ApiCalls'
+import { getFlat, getApts } from '../../../lib/ApiCalls'
 
 
 /* Allows you to view apt card info and delete apt card*/
@@ -12,6 +12,17 @@ const FlatPage = ({session, userId, flatId}) => {
 
   const router = useRouter()
   const [message, setMessage] = useState('')
+  const [apts, setApts] = useState([]);
+
+  const { data: apartments } = useQuery('apts', () => getApts())
+
+  const showApts = () => {
+  setApts(apartments)
+  }
+
+  const removeApts = () => {
+      setApts([])
+  }
 
 
   const { data: flat } = useQuery(['flats', flatId], () => getFlat({ userId, flatId}))
@@ -34,10 +45,15 @@ const FlatPage = ({session, userId, flatId}) => {
       <div className='grid grid-cols-1'>
 
         {session && flat && <Dashboard session={session}>
-          <FlatBigCard key={flat._id} flat={flat} handleDelete={handleDelete} />
+        <div className='flex pb-3 w-[100%] justify-self-end'>
+        {!apts[0] && <button onClick={showApts} className='button'>Pokaži nekretnine na tržištu</button>}
+        {apts[0] && <button onClick={removeApts} className='button'>Skloni nekretnine na tržištu</button>}
+        </div>
+          <FlatBigCard key={flat._id} flat={flat} handleDelete={handleDelete} apts={apts} />
         </ Dashboard>}
 
         {message && <p>{message}</p>}
+
       </div>
     </div >
   )

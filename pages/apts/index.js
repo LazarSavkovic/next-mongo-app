@@ -27,7 +27,7 @@ const Index = () => {
   return (
 
     <div className="flex bg-blue-400">
-      <div className="m-auto bg-slate-50 rounded-md w-3/5 mt-24 pt-16">
+      <div className="m-auto bg-slate-50 rounded-md w-3/5 mt-24 pt-16  flex justify-center flex-col">
         <h1 className="text-3xl text-center tracking-wider">
           Nekretnine u Beogradu
         </h1>
@@ -41,13 +41,14 @@ const Index = () => {
             <AptCard key={apt._id} apt={apt} />
           ))}
 
-          <Pagination
+        </motion.div>
+        
+        <Pagination
             items={posts.length}
             pageSize={pageSize}
             currentPage={currentPage}
             onPageChange={handlePageChange}
           />
-        </motion.div>
 
 
       </div>

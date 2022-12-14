@@ -16,7 +16,7 @@ const Pagination = ({ items, pageSize, currentPage, onPageChange }) => {
     }
     return (
         <>
-            <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+            <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm flex justify-center" aria-label="Pagination">
             <a key={'Prethodna'}
                                 onClick={() => onPageChange(currentPage - 1)}
                                 style={{ cursor: "pointer" }}
