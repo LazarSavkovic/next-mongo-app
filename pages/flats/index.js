@@ -10,9 +10,10 @@ import { useEffect, useState } from 'react';
 const Flats = ({ session }) => {
 
 
-  const { data: flats } = useQuery('flats', () => getFlats(session.user._id))
+  const { data: flats, isLoading, isError, error } = useQuery('flats', () => getFlats(session.user._id))
   const [searchInput, setSearchInput] = useState('')
   const [filteredFlats, setFilteredFlats] = useState([])
+
 
   useEffect(() => {
     const newFlats = flats.filter((flat) => {
@@ -23,6 +24,16 @@ const Flats = ({ session }) => {
 
     setFilteredFlats(newFlats)
   }, [searchInput])
+
+  
+  if (isLoading) {
+    return <div>Učitava se</div>
+  }
+
+  if (isError) {
+    return<div>{error}</div>
+  }
+
 
 
   return (

@@ -10,7 +10,7 @@ import { getApts } from '../../lib/ApiCalls';
 
 const Index = () => {
 
-  const { data: apts } = useQuery('apts', getApts)
+  const { data: apts, isLoading, isError, error } = useQuery('apts', getApts)
  
   const [posts, setPosts] = useState([...apts]);
 
@@ -22,6 +22,16 @@ const Index = () => {
   };
 
   const paginatedPosts = paginate(posts, currentPage, pageSize);
+
+  if (isLoading) {
+    return <div>Učitava se</div>
+  }
+
+  if (isError) {
+    return<div>{error}</div>
+  }
+
+  
 
 
   return (
