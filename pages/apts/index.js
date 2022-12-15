@@ -1,5 +1,5 @@
 import AptCard from '../../components/AptComponents/AptCard'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "../../components/Pagination";
 import { paginate } from "../../lib/paginate";
 import { motion } from 'framer-motion'
@@ -11,7 +11,7 @@ import { getApts } from '../../lib/ApiCalls';
 const Index = () => {
 
   const { data: apts, isLoading, isError, error } = useQuery('apts', getApts)
- 
+
   const [posts, setPosts] = useState([...apts]);
 
   const pageSize = 10;
@@ -28,10 +28,13 @@ const Index = () => {
   }
 
   if (isError) {
-    return<div>{error}</div>
+    return <div>{error}</div>
   }
 
-  
+  useEffect(() => {
+    console.log(apts, error, posts, paginatedPosts)
+  }, [posts])
+
 
 
   return (
@@ -41,25 +44,27 @@ const Index = () => {
         <h1 className="text-3xl text-center tracking-wider">
           Nekretnine u Beogradu
         </h1>
-        <motion.div className='grid lg:grid-cols-2 m-auto pt-10 justify-center'
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}>
+        {paginatedPosts && <>
+          <motion.div className='grid lg:grid-cols-2 m-auto pt-10 justify-center'
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}>
 
 
-          {paginatedPosts.map((apt) => (
-            <AptCard key={apt._id} apt={apt} />
-          ))}
+            {paginatedPosts.map((apt) => (
+              <AptCard key={apt._id} apt={apt} />
+            ))}
 
-        </motion.div>
-        
-        <Pagination
+          </motion.div>
+
+          <Pagination
             items={posts.length}
             pageSize={pageSize}
             currentPage={currentPage}
             onPageChange={handlePageChange}
           />
-
+        </>
+          }
 
       </div>
     </div>

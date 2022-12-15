@@ -25,6 +25,10 @@ const Flats = ({ session }) => {
     setFilteredFlats(newFlats)
   }, [searchInput])
 
+  useEffect(() => {
+    console.log(flats, filteredFlats)
+  }, [filteredFlats])
+
   
   if (isLoading) {
     return <div>Učitava se</div>
@@ -39,7 +43,7 @@ const Flats = ({ session }) => {
   return (
     <div className="container mx-auto my-28 w-3/4" >
       <div className='grid grid-cols-1'>
-        {session && <Dashboard session={session} setSearchInput={setSearchInput} searchInput={searchInput}>
+        {session && filteredFlats && <Dashboard session={session} setSearchInput={setSearchInput} searchInput={searchInput}>
           <div className='flex flex-col items-center'>
             {filteredFlats && filteredFlats.map((flat, i) => (
               <FlatCard key={flat._id} flat={flat} />
