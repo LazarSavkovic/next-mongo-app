@@ -12,7 +12,7 @@ const Index = () => {
 
   const { data: apts, isLoading, isError, error } = useQuery('apts', getApts)
 
-  const [posts, setPosts] = useState([...apts]);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     if((!isLoading) && (!isError))
