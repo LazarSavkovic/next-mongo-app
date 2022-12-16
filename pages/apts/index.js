@@ -15,8 +15,9 @@ const Index = () => {
   const [posts, setPosts] = useState([...apts]);
 
   useEffect(() => {
+    if((!isLoading) && (!isError))
     setPosts(apts)
-  }, [])
+  }, [posts])
 
   // const pageSize = 10;
   // const [currentPage, setCurrentPage] = useState(1);
