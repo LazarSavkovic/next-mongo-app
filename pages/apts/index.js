@@ -57,12 +57,12 @@ const Index = () => {
 
           </motion.div>
 
-          <Pagination
+          {/* <Pagination
             items={posts.length}
             pageSize={pageSize}
             currentPage={currentPage}
             onPageChange={handlePageChange}
-          />
+          /> */}
         </>
           }
 
