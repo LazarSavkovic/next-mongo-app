@@ -9,9 +9,10 @@ import { useEffect, useState } from 'react';
 
 const Flats = ({ session }) => {
 
-
-  const { data: flats, isLoading, isError, error } = useQuery('flats', () => getFlats(session.user._id))
+  const [flats, setFlats] = useState([])
+  const { isLoading, isError, error } = useQuery('flats', () => getFlats(session.user._id),  {onSuccess: setFlats})
   const [searchInput, setSearchInput] = useState('')
+
   const [filteredFlats, setFilteredFlats] = useState([])
 
 
@@ -23,7 +24,7 @@ const Flats = ({ session }) => {
     })
 
     setFilteredFlats(newFlats)
-  }, [searchInput])
+  }, [flats, searchInput])
 
   useEffect(() => {
     console.log(flats, filteredFlats)
