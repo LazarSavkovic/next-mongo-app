@@ -12,7 +12,11 @@ const Index = () => {
 
   const { data: apts, isLoading, isError, error } = useQuery('apts', getApts)
 
-  // const [posts, setPosts] = useState([...apts]);
+  const [posts, setPosts] = useState([...apts]);
+
+  useEffect(() => {
+    setPosts(apts)
+  }, [])
 
   // const pageSize = 10;
   // const [currentPage, setCurrentPage] = useState(1);
@@ -31,9 +35,9 @@ const Index = () => {
     return <div>{error}</div>
   }
 
-  // useEffect(() => {
-  //   console.log(apts)
-  // }, [posts])
+  useEffect(() => {
+    console.log(posts)
+  }, [posts])
 
 
 
@@ -44,14 +48,14 @@ const Index = () => {
         <h1 className="text-3xl text-center tracking-wider">
           Nekretnine u Beogradu
         </h1>
-        {apts && <>
+        {posts && <>
           <motion.div className='grid lg:grid-cols-2 m-auto pt-10 justify-center'
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}>
 
 
-            {apts.map((apt) => (
+            {posts.map((apt) => (
               <AptCard key={apt._id} apt={apt} />
             ))}
 
