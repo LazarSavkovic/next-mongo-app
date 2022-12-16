@@ -12,16 +12,16 @@ const Index = () => {
 
   const { data: apts, isLoading, isError, error } = useQuery('apts', getApts)
 
-  const [posts, setPosts] = useState([...apts]);
+  // const [posts, setPosts] = useState([...apts]);
 
-  const pageSize = 10;
-  const [currentPage, setCurrentPage] = useState(1);
+  // const pageSize = 10;
+  // const [currentPage, setCurrentPage] = useState(1);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  // const handlePageChange = (page) => {
+  //   setCurrentPage(page);
+  // };
 
-  const paginatedPosts = paginate(posts, currentPage, pageSize);
+  // const paginatedPosts = paginate(posts, currentPage, pageSize);
 
   if (isLoading) {
     return <div>Učitava se</div>
@@ -31,9 +31,9 @@ const Index = () => {
     return <div>{error}</div>
   }
 
-  useEffect(() => {
-    console.log(apts, error, posts, paginatedPosts)
-  }, [posts])
+  // useEffect(() => {
+  //   console.log(apts)
+  // }, [posts])
 
 
 
@@ -44,14 +44,14 @@ const Index = () => {
         <h1 className="text-3xl text-center tracking-wider">
           Nekretnine u Beogradu
         </h1>
-        {paginatedPosts && <>
+        {apts && <>
           <motion.div className='grid lg:grid-cols-2 m-auto pt-10 justify-center'
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}>
 
 
-            {paginatedPosts.map((apt) => (
+            {apts.map((apt) => (
               <AptCard key={apt._id} apt={apt} />
             ))}
 
