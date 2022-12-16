@@ -36,7 +36,7 @@ const Index = () => {
   }
 
   useEffect(() => {
-    console.log(posts)
+    console.log('Posts right now are:', posts)
   }, [posts])
 
 
