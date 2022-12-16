@@ -28,6 +28,10 @@ const Index = () => {
 
   // const paginatedPosts = paginate(posts, currentPage, pageSize);
 
+  useEffect(() => {
+    console.log('Posts right now are:', posts)
+  }, [posts])
+
   if (isLoading) {
     return <div>Učitava se</div>
   }
@@ -35,10 +39,6 @@ const Index = () => {
   if (isError) {
     return <div>{error}</div>
   }
-
-  useEffect(() => {
-    console.log('Posts right now are:', posts)
-  }, [posts])
 
 
 
