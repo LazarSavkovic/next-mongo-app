@@ -10,14 +10,14 @@ import { getApts } from '../../lib/ApiCalls';
 
 const Index = () => {
 
-  const { data: apts, isLoading, isError, error } = useQuery('apts', getApts)
-
   const [posts, setPosts] = useState([]);
+  const { data: apts, isLoading, isError, error } = useQuery('apts', getApts, {onSuccess: setPosts})
 
-  useEffect(() => {
-    if((!isLoading) && (!isError))
-    setPosts(apts)
-  }, [posts])
+
+  // useEffect(() => {
+  //   if((!isLoading) && (!isError))
+  //   setPosts(apts)
+  // }, [posts])
 
   // const pageSize = 10;
   // const [currentPage, setCurrentPage] = useState(1);
