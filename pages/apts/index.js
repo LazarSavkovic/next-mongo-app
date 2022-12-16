@@ -13,20 +13,14 @@ const Index = () => {
   const [posts, setPosts] = useState([]);
   const { data: apts, isLoading, isError, error } = useQuery('apts', getApts, {onSuccess: setPosts})
 
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // useEffect(() => {
-  //   if((!isLoading) && (!isError))
-  //   setPosts(apts)
-  // }, [posts])
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
-  // const pageSize = 10;
-  // const [currentPage, setCurrentPage] = useState(1);
-
-  // const handlePageChange = (page) => {
-  //   setCurrentPage(page);
-  // };
-
-  // const paginatedPosts = paginate(posts, currentPage, pageSize);
+  const paginatedPosts = paginate(posts, currentPage, pageSize);
 
   useEffect(() => {
     console.log('Posts right now are:', posts)
@@ -49,25 +43,25 @@ const Index = () => {
         <h1 className="text-3xl text-center tracking-wider">
           Nekretnine u Beogradu
         </h1>
-        {posts && <>
+        {paginatedPosts && <>
           <motion.div className='grid lg:grid-cols-2 m-auto pt-10 justify-center'
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}>
 
 
-            {posts.map((apt) => (
+            {paginatedPosts.map((apt) => (
               <AptCard key={apt._id} apt={apt} />
             ))}
 
           </motion.div>
 
-          {/* <Pagination
+          <Pagination
             items={posts.length}
             pageSize={pageSize}
             currentPage={currentPage}
             onPageChange={handlePageChange}
-          /> */}
+          />
         </>
           }
 
