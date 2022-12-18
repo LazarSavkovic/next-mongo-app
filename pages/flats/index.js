@@ -4,6 +4,7 @@ import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Dashboard from '../../components/Dashboard'
 import { getFlats } from '../../lib/ApiCalls'
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router'
 
 
 
@@ -39,6 +40,8 @@ const Flats = ({ session }) => {
     return<div>{error}</div>
   }
 
+  const { locale, locales, push  } = useRouter()
+
 
 
   return (
@@ -46,6 +49,8 @@ const Flats = ({ session }) => {
       <div className='grid grid-cols-1'>
         {session && filteredFlats && <Dashboard session={session} setSearchInput={setSearchInput} searchInput={searchInput}>
           <div className='flex flex-col items-center'>
+            <h1>{locale}</h1>
+            <h1>{locales}</h1>
             {filteredFlats && filteredFlats.map((flat, i) => (
               <FlatCard key={flat._id} flat={flat} />
             ))}

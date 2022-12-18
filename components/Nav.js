@@ -5,13 +5,16 @@ import { useRouter } from 'next/router'
 import { useSession, signOut } from 'next-auth/react'
 import {motion} from 'framer-motion'
 
+import { useTranslation } from 'next-i18next'
+
 
 
 const Nav = () => {
+    const {t} = useTranslation('common');
     let Links = [
-        { name: "MOJE NEKRETNINE", link: "/flats" },
-        { name: "TRŽIŠTE", link: "/apts" },
-        { name: "KONTAKT", link: "/" },
+        { name: t('my properties'), link: "/flats" },
+        { name: t('market'), link: "/apts" },
+        { name: t('contact us'), link: "/" },
     ];
     let [open, setOpen] = useState(false);
 
@@ -20,6 +23,12 @@ const Nav = () => {
         signOut()
       }
     const router = useRouter();
+    const {locale, locales} = router;
+    const oppositeLocale = locales.filter((loc => loc !== locale))[0]
+
+    const handleLanguageChange = () => {
+        router.push(router.asPath, undefined, { locale: oppositeLocale })
+    }
 
     function goToLogin() {
         router.push('/login')
@@ -57,9 +66,10 @@ const Nav = () => {
                             </li>
                         ))
                     }{session ? 
-                        <Button function={handleSignOut}>ODJAVI SE</Button> : 
-                        <><Button function={goToLogin}>PRIJAVI SE</Button>
-                        <Button function={goToRegister}>REGISTRUJ SE</Button></>}
+                        <Button function={handleSignOut}>{t('log out')}</Button> : 
+                        <><Button function={goToLogin}>{t('log in')}</Button>
+                        <Button function={goToRegister}>{t('register')}</Button></>}
+                        <button onClick={handleLanguageChange} className='pl-3'>{oppositeLocale}</button>
 
                 </ul>
             </div>

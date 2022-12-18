@@ -9,8 +9,12 @@ import { useFormik } from 'formik'
 import { registerValidate } from '../lib/validate'
 import { useRouter } from 'next/router'
 import { motion } from 'framer-motion'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 const Register = () => {
+
+    const {t} = useTranslation('register')
 
     const [show, setShow] = useState({ password: false, cpassword: false });
     const router = useRouter();
@@ -42,7 +46,7 @@ const Register = () => {
     return (
         <AuthLayout>
             <Head>
-                <title>Registruj se</title>
+                <title>{t('register')}</title>
             </Head>
             <motion.section
                 initial={{ opacity: 0, scale: 0.7 }}
@@ -55,14 +59,14 @@ const Register = () => {
                 }}
                 className='w-3/4 mx-auto flex flex-col gap-5'>
                 <div className='title'>
-                    <h1 className='text-gray-800 text-2xl font-bold py-2 tracking-wider'>Registruj se</h1>
+                    <h1 className='text-gray-800 text-2xl font-bold py-2 tracking-wider'>{t('register')}</h1>
                 </div>
                 <form onSubmit={formik.handleSubmit} className='flex flex-col gap-5'>
                     <div className={styles.input_group}>
                         <input
                             type='text'
                             name='username'
-                            placeholder='Korisničko ime'
+                            placeholder={t('username')}
                             className={styles.input_text}
                             {...formik.getFieldProps('username')} />
                         <span className='icon flex items-center px-4' >
@@ -74,7 +78,7 @@ const Register = () => {
                         <input
                             type='email'
                             name='email'
-                            placeholder='E-mail'
+                            placeholder={t('email')}
                             className={styles.input_text}
                             {...formik.getFieldProps('email')} />
                         <span className='icon flex items-center px-4' >
@@ -86,7 +90,7 @@ const Register = () => {
                         <input
                             type={show.password ? 'text' : 'password'}
                             name='password'
-                            placeholder='Šifra'
+                            placeholder={t('password')}
                             className={styles.input_text}
                             {...formik.getFieldProps('password')} />
                         <span className='icon flex items-center px-4' onClick={() => setShow({ ...show, password: !show.password })}>
@@ -98,7 +102,7 @@ const Register = () => {
                         <input
                             type={show.cpassword ? 'text' : 'password'}
                             name='cpassword'
-                            placeholder='Potvrdite šifru '
+                            placeholder={t('confirm password')}
                             className={styles.input_text}
                             {...formik.getFieldProps('cpassword')} />
                         <span className='icon flex items-center px-4' onClick={() => setShow({ ...show, cpassword: !show.cpassword })}>
@@ -108,16 +112,27 @@ const Register = () => {
                     {formik.errors.cpassword && formik.touched.cpassword ? <span className='text-rose-500'>{formik.errors.cpassword}</span> : <></>}
                     <div className={styles.button}>
                         <button type='submit'>
-                            Registruj se
+                            {t('register')}
                         </button>
                     </div>
                 </form>
                 <p className='text-center text-gray-400'>
-                    Imate nalog? <Link href='/login' legacyBehavior><a className='text-blue-700'>Prijavite se</a></Link>
+                    {t('have account?')}<Link href='/login' legacyBehavior><a className='text-blue-700'>{t('log in')}</a></Link>
                 </p>
             </motion.section>
         </AuthLayout>
     )
 }
+
+
+export async function getStaticProps({ locale }) {
+    return {
+      props: {
+        ...(await serverSideTranslations(locale, ['register', 'common'])),
+        // Will be passed to the page component as props
+      },
+    }
+  }
+  
 
 export default Register
