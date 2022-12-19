@@ -6,7 +6,15 @@ const nextConfig = {
     compiler: {
       styledComponents: true,
     },
-    i18n
+    i18n,
+
+    
+  webpack5: true,
+  webpack: (config) => {
+    config.resolve.fallback = { fs: false };
+
+    return config;
+  },
   }
   
   module.exports = nextConfig
