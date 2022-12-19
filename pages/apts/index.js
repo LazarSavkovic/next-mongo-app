@@ -4,11 +4,14 @@ import Pagination from "../../components/Pagination";
 import { paginate } from "../../lib/paginate";
 import { motion } from 'framer-motion'
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { getApts } from '../../lib/ApiCalls';
+import { useTranslation } from 'next-i18next';
 
 
 const Index = () => {
+
+  const {t} = useTranslation('apts')
 
   const [posts, setPosts] = useState([]);
   const { isLoading, isError, error } = useQuery('apts', getApts, {onSuccess: setPosts})
@@ -38,10 +41,10 @@ const Index = () => {
 
   return (
 
-    <div className="flex bg-blue-400">
-      <div className="m-auto bg-slate-50 rounded-md w-3/5 mt-24 pt-16  flex justify-center flex-col">
+    <div className="flex bg-blue-400 min-h-screen">
+      <div className="m-auto bg-slate-50 rounded-md w-3/5 mt-24 pt-16  flex justify-center flex-col min-h-screen">
         <h1 className="text-3xl text-center tracking-wider">
-          Nekretnine u Beogradu
+         {t('properties in belgrade')}
         </h1>
         {paginatedPosts && <>
           <motion.div className='grid lg:grid-cols-2 m-auto pt-10 justify-center'
@@ -71,8 +74,7 @@ const Index = () => {
   )
 }
 
-/* Retrieves pet(s) data from mongodb database */
-export async function getServerSideProps() {
+export async function getServerSideProps({locale}) {
 
   const queryClient = new QueryClient()
 
@@ -81,6 +83,8 @@ export async function getServerSideProps() {
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
+      ...(await serverSideTranslations(locale, [ 'common', 'apts'])),
+      // Will be passed to the page component as props
     },
   }
 }

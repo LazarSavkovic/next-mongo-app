@@ -1,13 +1,15 @@
 {
     "more details": "More details",
+    "properties in belgrade" : "Properties in Belgrade",
     "title": "Title",
+    "price": "Price",
     "address": "Address",
     "short description": "Short description",
     "area": "Area",
     "rooms": "Number of rooms",
     "floor": "Floor",
-    "show properties on market": "Show properties on the market",
-    "remove properties on market": "Remove properties on the market",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
     "edit": "Edit",
     "delete": "Delete",
     "submit": "Submit"

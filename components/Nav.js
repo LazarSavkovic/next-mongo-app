@@ -3,14 +3,13 @@ import Button from './Button';
 import Link from 'next/link';
 import { useRouter } from 'next/router'
 import { useSession, signOut } from 'next-auth/react'
-import {motion} from 'framer-motion'
-
+import { motion } from 'framer-motion'
 import { useTranslation } from 'next-i18next'
 
 
 
 const Nav = () => {
-    const {t} = useTranslation('common');
+    const { t } = useTranslation('common');
     let Links = [
         { name: t('my properties'), link: "/flats" },
         { name: t('market'), link: "/apts" },
@@ -21,9 +20,9 @@ const Nav = () => {
     const { data: session } = useSession();
     function handleSignOut() {
         signOut()
-      }
+    }
     const router = useRouter();
-    const {locale, locales} = router;
+    const { locale, locales } = router;
     const oppositeLocale = locales.filter((loc => loc !== locale))[0]
 
     const handleLanguageChange = () => {
@@ -38,14 +37,14 @@ const Nav = () => {
     }
     return (
         <motion.div
-        initial={{y: 25, opacity: 0}}
-        animate={{y: 0, opacity: 1}}
-        transition={{
-            delay: 0.4,
-            duration: 0.75
-        }}
+            initial={{ y: 25, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{
+                delay: 0.4,
+                duration: 0.75
+            }}
 
-         className='shadow-md w-full fixed top-0 left-0 z-50'>
+            className='shadow-md w-full fixed top-0 left-0 z-50'>
             <div className='md:flex items-center justify-between bg-white py-4 md:px-10 px-7'>
                 <Link href='/' legacyBehavior><a className='font-bold text-l cursor-pointer flex items-center font-[Poppins] text-gray-800'>
                     <span className='text-2xl text-indigo-600 mr-1'>
@@ -65,11 +64,15 @@ const Nav = () => {
                                 <Link href={link.link} legacyBehavior><a className='text-gray-800 hover:text-gray-400 duration-500'>{link.name}</a></Link>
                             </li>
                         ))
-                    }{session ? 
-                        <Button function={handleSignOut}>{t('log out')}</Button> : 
+                    }{session ?
+                        <Button function={handleSignOut}>{t('log out')}</Button> :
                         <><Button function={goToLogin}>{t('log in')}</Button>
-                        <Button function={goToRegister}>{t('register')}</Button></>}
-                        <button className='border-l ml-3 pl-2 pr-0 ' onClick={handleLanguageChange}>{oppositeLocale}</button>
+                            <Button function={goToRegister}>{t('register')}</Button></>}
+                    <button className='border-l ml-3 pl-4 flex justify-center items-center gap-1' onClick={handleLanguageChange}>
+                        {oppositeLocale}
+                        {(oppositeLocale === 'sr') && <img style={{width: '20px'}} src="/icons/serbia-flag-icon.svg" alt="An SVG of an eye" />}
+                        {(oppositeLocale === 'en') && <img style={{width: '20px'}} src="/icons/united-kingdom-flag-icon.svg" alt="An SVG of an eye" />}
+                    </button>
 
                 </ul>
             </div>

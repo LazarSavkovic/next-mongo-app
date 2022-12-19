@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import Button from '../Button'
 import AptMaps from './AptMaps'
+import { useTranslation } from 'next-i18next'
 
 
 const AptBigCard = ({ apt, handleDelete }) => {
 
+    const {t} = useTranslation('apts')
 
     return (
         <div className="max-w-lg bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 m-5">
@@ -15,9 +17,9 @@ const AptBigCard = ({ apt, handleDelete }) => {
                 <a href="#">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{apt.title}</h5>
                 </a>
-                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Opis: {apt.short_description}</p>
-                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Povrsina: {apt.sq_mt} m<sup>2</sup></p>
-                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Broj soba: {apt.rooms}</p>
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{t('short description')}: {apt.short_description}</p>
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{t('area')}: {apt.sq_mt} m<sup>2</sup></p>
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{t('rooms')}: {apt.rooms}</p>
                 <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold text-gray-900 dark:text-white">{apt.price} €</span>
                 </div>
@@ -26,9 +28,9 @@ const AptBigCard = ({ apt, handleDelete }) => {
                 </div>
 
                 <div className='flex gap-5 mt-4'>
-                    <Link href="/apts/[id]/edit" as={`/apts/${apt._id}/edit`} legacyBehavior><a className="button grow">Izmeni</a></Link>
+                    <Link href="/apts/[id]/edit" as={`/apts/${apt._id}/edit`} legacyBehavior><a className="button grow">{t('edit')}</a></Link>
                     <button onClick={handleDelete} className='button grow'>
-                        Izbrisi
+                    {t('delete')}
                     </button>
                 </div>
             </div>

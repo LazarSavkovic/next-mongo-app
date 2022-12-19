@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import AptForm from '../../../components/AptComponents/AptForm'
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { getApt } from '../../../lib/ApiCalls'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 
 
@@ -35,7 +36,7 @@ const EditApt = ({id}) => {
 }
 
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, locale }) {
 
   const id = params.id;
 
@@ -46,7 +47,9 @@ export async function getServerSideProps({ params }) {
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
-      id: id
+      id: id,
+      ...(await serverSideTranslations(locale, [ 'common', 'apts'])),
+      // Will be passed to the page component as props
     },
   }
 }

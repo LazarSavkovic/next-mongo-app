@@ -6,10 +6,13 @@ import Dashboard from '../../../components/Dashboard'
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { getFlat, getApts } from '../../../lib/ApiCalls'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 
 /* Allows you to view apt card info and delete apt card*/
 const FlatPage = ({session, userId, flatId}) => {
+
+  const {t} = useTranslation('flats')
 
   const router = useRouter()
   const [message, setMessage] = useState('')
@@ -47,8 +50,8 @@ const FlatPage = ({session, userId, flatId}) => {
 
         {session && flat && <Dashboard session={session}>
         <div className='flex pb-3 w-[100%] justify-self-end'>
-        {!apts[0] && <button onClick={showApts} className='button'>Prikaži nekretnine na tržištu</button>}
-        {apts[0] && <button onClick={removeApts} className='button'>Skloni nekretnine na tržištu</button>}
+        {!apts[0] && <button onClick={showApts} className='button'>{t('show properties on market')}</button>}
+        {apts[0] && <button onClick={removeApts} className='button'>{t('remove properties on market')}</button>}
         </div>
           <FlatBigCard key={flat._id} flat={flat} handleDelete={handleDelete} apts={apts} />
         </ Dashboard>}

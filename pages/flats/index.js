@@ -50,8 +50,6 @@ const Flats = ({ session }) => {
       <div className='grid grid-cols-1'>
         {session && filteredFlats && <Dashboard session={session} setSearchInput={setSearchInput} searchInput={searchInput}>
           <div className='flex flex-col items-center'>
-            <h1>{locale}</h1>
-            <h1>{locales}</h1>
             {filteredFlats && filteredFlats.map((flat, i) => (
               <FlatCard key={flat._id} flat={flat} />
             ))}

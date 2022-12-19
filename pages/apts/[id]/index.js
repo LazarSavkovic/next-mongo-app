@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import AptBigCard from '../../../components/AptComponents/AptBigCard'
 import { getApt } from '../../../lib/ApiCalls'
-
 import { dehydrate, QueryClient, useQuery } from 'react-query';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 
 /* Allows you to view apt card info and delete apt card*/
@@ -44,7 +44,7 @@ const AptPage = ({id}) => {
   )
 }
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, locale }) {
 
   const id = params.id;
 
@@ -55,9 +55,12 @@ export async function getServerSideProps({ params }) {
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
-      id: id
+      id: id,
+      ...(await serverSideTranslations(locale, [ 'common', 'apts'])),
+      // Will be passed to the page component as props
     },
   }
 }
+
 
 export default AptPage
