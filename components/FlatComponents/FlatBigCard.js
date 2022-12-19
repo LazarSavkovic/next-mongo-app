@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import FlatMaps from './FlatMaps'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'next-i18next'
 
 const FlatBigCard = ({ flat, handleDelete, apts }) => {
 
+    const {t} = useTranslation('flats')
     return (
 
         <motion.div initial={{ opacity: 0, scale: 0.8 }}
@@ -16,18 +18,18 @@ const FlatBigCard = ({ flat, handleDelete, apts }) => {
             <div className="flex flex-col justify-between px-4 leading-normal md:w-2/4  py-10">
                 <div>
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-800 dark:text-white">{flat.title}</h5>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Adresa: {flat.location}</p>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Opis: {flat.short_description}</p>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Povrsina: {flat.sq_mt} m<sup>2</sup></p>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Broj soba: {flat.rooms}</p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{t('address')}: {flat.location}</p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{t('short description')}: {flat.short_description}</p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{t('area')}: {flat.sq_mt} m<sup>2</sup></p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{t('rooms')}: {flat.rooms}</p>
                     <div className="flex justify-between items-center">
                         <span className="text-2xl font-bold text-gray-800 dark:text-white">{flat.value} €</span>
 
                     </div></div>
                 <div className='flex items-center gap-5'>
-                    <Link href="/flats/[id]/edit" as={`/flats/${flat._id}/edit`} legacyBehavior><a className="button grow">Izmeni</a></Link>
+                    <Link href="/flats/[id]/edit" as={`/flats/${flat._id}/edit`} legacyBehavior><a className="button grow">{t('edit')}</a></Link>
                     <button onClick={handleDelete} className='button grow'>
-                        Izbrisi
+                    {t('delete')}
                     </button>
                 </div>
             </div>

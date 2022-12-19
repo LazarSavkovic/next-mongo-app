@@ -1,6 +1,7 @@
 import FlatForm from '../../components/FlatComponents/FlatForm'
 import { getSession } from 'next-auth/react'
 import Dashboard from '../../components/Dashboard'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const NewFlat = ({ userId, session }) => {
   const flatForm = {
@@ -32,7 +33,7 @@ const NewFlat = ({ userId, session }) => {
 }
 
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, locale }) {
   const session = await getSession({ req })
 
   if (!session) {
@@ -50,7 +51,9 @@ export async function getServerSideProps({ req }) {
   return {
     props: {
       session: session,
-      userId: userId
+      userId: userId,
+      ...(await serverSideTranslations(locale, ['dashboard', 'common', 'flats'])),
+      // Will be passed to the page component as props
     }
   }
 }

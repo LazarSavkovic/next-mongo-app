@@ -3,9 +3,12 @@ import { useRouter } from 'next/router'
 import mongoose from 'mongoose'
 import { useMutation , QueryClient} from 'react-query'
 import { postFlat, updateFlat } from '../../lib/ApiCalls'
+import { useTranslation } from 'next-i18next'
 
 
 const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = false }) => {
+
+  const {t} = useTranslation('flats')
   const router = useRouter()
   const contentType = 'application/json'
   const [errors, setErrors] = useState({})
@@ -148,7 +151,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
     <>
       <form className='w-[100%] md:w-3/4 lg:w-[65%] xl:w-[60%]' id={formId} onSubmit={handleSubmit}>
         <div className="mb-6">
-          <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Naziv</label>
+          <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{t('title')}</label>
           <input
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             type="text"
@@ -160,7 +163,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
           />
         </div>
         <div className="mb-6">
-          <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Adresa</label>
+          <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{t('address')}</label>
           <input
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             type="text"
@@ -173,7 +176,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
         </div>
 
         <div className="mb-6">
-          <label htmlFor="short_description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Kratak opis</label>
+          <label htmlFor="short_description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{t('short description')}</label>
           <input
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             type="text"
@@ -185,7 +188,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
           />
         </div>
         <div className="mb-6">
-          <label htmlFor="sq_mt" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Povrsina</label>
+          <label htmlFor="sq_mt" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{t('area')}</label>
           <input
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             type="number"
@@ -195,7 +198,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
           />
         </div>
         <div className="mb-6">
-          <label htmlFor="rooms" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Broj soba</label>
+          <label htmlFor="rooms" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{t('rooms')}</label>
           <input
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             type="number"
@@ -205,7 +208,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
           />
         </div>
         <div className="mb-6">
-          <label htmlFor="floor" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sprat</label>
+          <label htmlFor="floor" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{t('floor')}</label>
           <input
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             name="floor"
@@ -215,7 +218,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
           />
         </div>
         <button type="submit" className="text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-          Submit
+          {t('submit')}
         </button>
       </form>
       <p>{message}</p>

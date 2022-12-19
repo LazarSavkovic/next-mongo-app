@@ -5,6 +5,8 @@ import { useState } from 'react'
 import { getCenter } from 'geolib'
 import { getFlats } from '../../lib/ApiCalls'
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 
 
@@ -98,7 +100,7 @@ const Maps = ({ session }) => {
     )
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, locale }) {
     const session = await getSession({ req })
 
     if (!session) {
@@ -121,7 +123,9 @@ export async function getServerSideProps({ req }) {
         props: {
 
             dehydratedState: dehydrate(queryClient),
-            session: session
+            session: session,
+            ...(await serverSideTranslations(locale, ['dashboard', 'common'])),
+            // Will be passed to the page component as props
         }
     }
 }

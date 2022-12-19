@@ -69,7 +69,7 @@ const Nav = () => {
                         <Button function={handleSignOut}>{t('log out')}</Button> : 
                         <><Button function={goToLogin}>{t('log in')}</Button>
                         <Button function={goToRegister}>{t('register')}</Button></>}
-                        <button onClick={handleLanguageChange} className='pl-3'>{oppositeLocale}</button>
+                        <button className='border-l ml-3 pl-2 pr-0 ' onClick={handleLanguageChange}>{oppositeLocale}</button>
 
                 </ul>
             </div>

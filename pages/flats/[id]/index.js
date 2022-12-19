@@ -5,6 +5,7 @@ import { getSession } from 'next-auth/react'
 import Dashboard from '../../../components/Dashboard'
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { getFlat, getApts } from '../../../lib/ApiCalls'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 
 /* Allows you to view apt card info and delete apt card*/
@@ -62,7 +63,7 @@ const FlatPage = ({session, userId, flatId}) => {
 
 
 
-export async function getServerSideProps({ params, req }) {
+export async function getServerSideProps({ params, req, locale }) {
 
   const session = await getSession({ req })
 
@@ -84,7 +85,9 @@ export async function getServerSideProps({ params, req }) {
       dehydratedState: dehydrate(queryClient),
       session: session,
       userId: session.user._id,
-      flatId: params.id
+      flatId: params.id,
+      ...(await serverSideTranslations(locale, ['dashboard', 'common', 'flats'])),
+      // Will be passed to the page component as props
     },
   }
 }

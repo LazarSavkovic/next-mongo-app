@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import FlatBigCard from '../../../components/FlatComponents/FlatBigCard'
 import { getSession } from 'next-auth/react'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 
 const PredictedFlatPage = () => {
@@ -47,7 +48,7 @@ const PredictedFlatPage = () => {
 
 
 
-export async function getServerSideProps({ params, req }) {
+export async function getServerSideProps({ params, req, locale }) {
 
   const session = await getSession({ req })
 
@@ -60,7 +61,10 @@ export async function getServerSideProps({ params, req }) {
     }
   }
 
-  return { props: { } }
+  return { props: { 
+      ...(await serverSideTranslations(locale, ['dashboard', 'common', 'flats'])),
+      // Will be passed to the page component as props
+  } }
 }
 
 export default PredictedFlatPage

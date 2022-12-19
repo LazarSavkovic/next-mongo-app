@@ -5,6 +5,7 @@ import Dashboard from '../../components/Dashboard'
 import { getFlats } from '../../lib/ApiCalls'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 
 
@@ -63,7 +64,7 @@ const Flats = ({ session }) => {
   )
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, locale }) {
   const session = await getSession({ req })
 
   if (!session) {
@@ -82,7 +83,9 @@ export async function getServerSideProps({ req }) {
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
-      session: session
+      session: session,
+      ...(await serverSideTranslations(locale, ['dashboard', 'common', 'flats'])),
+      // Will be passed to the page component as props
     },
   }
 }

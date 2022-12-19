@@ -2,6 +2,7 @@ import styles from '../../styles/Home.module.css'
 import { getSession } from 'next-auth/react'
 import FlatCard from '../../components/FlatComponents/FlatCard'
 import { useEffect, useState } from 'react'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 
 
@@ -29,7 +30,7 @@ const PredictedFlats = () => {
     )
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, locale }) {
     const session = await getSession({ req })
 
     if (session) {
