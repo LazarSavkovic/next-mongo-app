@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import AptBigCard from '../../../components/AptComponents/AptBigCard'
 import { getApt } from '../../../lib/ApiCalls'
-import { dehydrate, QueryClient, useQuery } from 'react-query';
+import { dehydrate, QueryClient, useQuery, useQueryClient } from 'react-query';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 
@@ -12,7 +12,7 @@ const AptPage = ({id}) => {
 
   const router = useRouter()
 
-
+  const queryClient = useQueryClient()
   const { data: apt } = useQuery(['apts', id], () => getApt(id))
 
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import mongoose from 'mongoose'
-import { useMutation , QueryClient} from 'react-query'
+import { useMutation , useQueryClient} from 'react-query'
 import { postFlat, updateFlat } from '../../lib/ApiCalls'
 import { useTranslation } from 'next-i18next'
 
@@ -9,6 +9,7 @@ import { useTranslation } from 'next-i18next'
 const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = false }) => {
 
   const {t} = useTranslation('flats')
+  const {ft} = useTranslation('flatForm')
   const router = useRouter()
   const contentType = 'application/json'
   const [errors, setErrors] = useState({})
@@ -24,18 +25,23 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
   })
 
 
-  const queryClient = new QueryClient()
+  const queryClient = useQueryClient()
 
   
-  const postFlatMutation = useMutation((someForm) => postFlat(someForm), {
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['flats'] })
+  const postFlatMutation = useMutation(postFlat, {
+    onSuccess: (data) => {
+      const updatedFlat = data.data.data;
+      queryClient.invalidateQueries('flats')
+      queryClient.setQueryData(['flats', updatedFlat._id ], updatedFlat)
+
     }
   })
 
-  const putFlatMutation = useMutation(({form, id}) => updateFlat({form, id}), {
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['flats'] })
+  const putFlatMutation = useMutation(updateFlat, {
+    onSuccess: (data) => {
+      const newFlat = data.data.data;
+      queryClient.invalidateQueries('flats')
+      queryClient.setQueryData(['flats', newFlat._id ], newFlat)
     }
   })
 
@@ -45,7 +51,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
     const { id } = router.query
 
     try {
-      putFlatMutation.mutate({id, form})
+      putFlatMutation.mutate({form, id})
 
       // Throw error with status code in case Fetch API req failed
       if (putFlatMutation.isError) {
@@ -127,12 +133,12 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
   /* Makes sure pet info is filled for pet name, owner name, species, and image url*/
   const formValidate = () => {
     let err = {}
-    if (!form.title) err.title = 'Naziv je obavezno polje'
-    if (!form.location) err.location = 'Adresa je obavezno polje'
-    if (!form.short_description) err.short_description = 'Opis je obavezno polje'
-    if (!form.sq_mt) err.sq_mt = 'Povrsina je obavezno polje'
-    if (!form.rooms) err.rooms = 'Broj soba je obavezno polje'
-    if (!form.floor) err.floor = 'Sprat je obavezno polje'
+    if (!form.title) err.title = 'title is missing'
+    if (!form.location) err.location = 'address is missing'
+    if (!form.short_description) err.short_description = 'description is missing'
+    if (!form.sq_mt) err.sq_mt = 'area is missing'
+    if (!form.rooms) err.rooms = 'rooms is missing'
+    if (!form.floor) err.floor = 'floor is missing'
     return err
   }
 
@@ -224,7 +230,7 @@ const FlatForm = ({ userId, formId, flatForm, forNewFlat = true, justPredict = f
       <p>{message}</p>
       <div>
         {Object.keys(errors).map((err, index) => (
-          <li key={index}>{err}</li>
+          <li key={index}>{ft(err)}</li>
         ))}
       </div>
     </>

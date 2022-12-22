@@ -28,9 +28,9 @@ const Flats = ({ session }) => {
     setFilteredFlats(newFlats)
   }, [flats, searchInput])
 
-  useEffect(() => {
-    console.log(flats, filteredFlats)
-  }, [filteredFlats])
+  // useEffect(() => {
+  //   console.log(flats, filteredFlats)
+  // }, [filteredFlats])
 
   
   if (isLoading) {

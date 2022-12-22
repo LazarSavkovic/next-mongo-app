@@ -52,7 +52,7 @@ export async function getServerSideProps({ req, locale }) {
     props: {
       session: session,
       userId: userId,
-      ...(await serverSideTranslations(locale, ['dashboard', 'common', 'flats'])),
+      ...(await serverSideTranslations(locale, ['dashboard', 'common', 'flats', 'flatForm'])),
       // Will be passed to the page component as props
     }
   }

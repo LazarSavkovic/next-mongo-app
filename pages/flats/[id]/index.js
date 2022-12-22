@@ -3,11 +3,10 @@ import { useRouter } from 'next/router'
 import FlatBigCard from '../../../components/FlatComponents/FlatBigCard'
 import { getSession } from 'next-auth/react'
 import Dashboard from '../../../components/Dashboard'
-import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { getFlat, getApts } from '../../../lib/ApiCalls'
+import { dehydrate, QueryClient, useQuery, useMutation, useQueryClient} from 'react-query';
+import { getFlat, getApts, deleteFlat } from '../../../lib/ApiCalls'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
-
 
 /* Allows you to view apt card info and delete apt card*/
 const FlatPage = ({session, userId, flatId}) => {
@@ -28,15 +27,26 @@ const FlatPage = ({session, userId, flatId}) => {
       setApts([])
   }
 
+  const queryClient = useQueryClient()
+
+  const deleteFlatMutation = useMutation(deleteFlat
+    , {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['flats'] })}}
+      ) 
 
   const { data: flat } = useQuery(['flats', flatId], () => getFlat({ userId, flatId}))
 
   const handleDelete = async () => {
 
     try {
-      await fetch(`/api/flats/${flatID}`, {
-        method: 'Delete',
-      })
+      deleteFlatMutation.mutate(flatId)
+
+      // Throw error with status code in case Fetch API req failed
+      if (deleteFlatMutation.isError) {
+        throw new Error(deleteFlatMutation.error.message)
+      }
+
       router.push('/')
     } catch (error) {
       setMessage('Failed to delete the flat.')

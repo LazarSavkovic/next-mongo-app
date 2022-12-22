@@ -6,6 +6,7 @@ import { SessionProvider } from 'next-auth/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter } from 'next/router'
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { useState } from 'react'
 import { appWithTranslation } from 'next-i18next'
 
@@ -64,6 +65,7 @@ function MyApp({ Component, pageProps }) {
             </Layout>
             {/* </AnimatePresence> */}
           </Hydrate>
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </SessionProvider>
 

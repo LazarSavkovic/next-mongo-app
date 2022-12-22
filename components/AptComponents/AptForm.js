@@ -23,20 +23,24 @@ const AptForm = ({ formId, aptForm, forNewApt = true }) => {
     long: aptForm.long,
   })
 
-  const queryClient = new QueryClient()
 
-  const postAptMutation = useMutation((someForm) => postApt(someForm), {
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['apts'] })
+  const queryClient = useQueryClient()
+
+  const postAptMutation = useMutation(postApt, {
+    onSuccess: (data) => {
+      const newApt = data.data.data;
+      queryClient.invalidateQueries('apts')
+      queryClient.setQueryData(['apts', newApt._id ], newApt)
     }
   })
 
-  const putAptMutation = useMutation(({ form, id }) => updateApt({ form, id }), {
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['apts'] })
+  const putAptMutation = useMutation(updateApt, {
+    onSuccess: (data) => {
+      const updatedApt = data.data.data;
+      queryClient.invalidateQueries('apts')
+      queryClient.setQueryData(['apts', updatedApt._id ], updatedApt)
     }
   })
-
 
   /* The PUT method edits an existing entry in the mongodb database. */
   const putData = async (form) => {
@@ -101,14 +105,14 @@ const AptForm = ({ formId, aptForm, forNewApt = true }) => {
   /* Makes sure pet info is filled for pet name, owner name, species, and image url*/
   const formValidate = () => {
     let err = {}
-    if (!form.title) err.title = 'Naziv je obavezno polje'
-    if (!form.price) err.price = 'Cena je obavezno polje'
-    if (!form.short_description) err.short_description = 'Opis je obavezno polje'
-    if (!form.sq_mt) err.sq_mt = 'Povrsina je obavezno polje'
-    if (!form.rooms) err.rooms = 'Broj soba je obavezno polje'
-    if (aptForm.floor && !form.floor) err.floor = 'Sprat je obavezno polje'
-    if (!form.lat) err.lat = 'Latituda je obavezno polje'
-    if (!form.long) err.long = 'Longituda je obavezno polje'
+    if (!form.title) err.title = 'title is missing'
+    if (!form.price) err.price = 'price is missing'
+    if (!form.short_description) err.short_description = 'description is missing'
+    if (!form.sq_mt) err.sq_mt = 'area is missing'
+    if (!form.rooms) err.rooms = 'rooms is missing'
+    if (aptForm.floor && !form.floor) err.floor = 'floor is missing'
+    if (!form.lat) err.lat = 'latitude is missing'
+    if (!form.long) err.long = 'longitude is missing'
     return err
   }
 
